@@ -73,11 +73,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
             case 1:
                 fragment = new ApprovalFragment();
-                title = getString(R.string.title_approvals);
+                title = getString(R.string.title_alarms);
                 break;
             case 2:
                 fragment = new AlarmFragment();
-                title = getString(R.string.title_alarms);
+                title = getString(R.string.title_approvals);
                 break;
             default:
                 break;
