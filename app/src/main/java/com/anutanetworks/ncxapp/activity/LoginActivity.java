@@ -96,6 +96,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 progressDialog.hide();
+
                 if(statusCode == 401){
                     errorMsg.setText("Invalid username / password");
                     Toast.makeText(getApplicationContext(), "Authentication Failure", Toast.LENGTH_LONG).show();
