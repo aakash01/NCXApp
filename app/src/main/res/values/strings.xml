@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">NCX App</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_dashboard">Dashboard</string>
+    <string name="nav_item_alarms">Alarms</string>
+    <string name="nav_item_approvals">Approvals</string>
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_dashboard</item>
+        <item>@string/nav_item_alarms</item>
+        <item>@string/nav_item_approvals</item>
+    </string-array>
+
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_alarms">Alarms</string>
+    <string name="title_approvals">Approvals</string>
+
+    <string name="title_activity_login">Login</string>
+    <string name="login_title">Login</string>
+    <string name="host_url">Host Url</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="organization">Organization</string>
+</resources>
