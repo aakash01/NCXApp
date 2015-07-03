@@ -16,15 +16,6 @@ import com.anutanetworks.ncxapp.R;
 
 import com.anutanetworks.ncxapp.activity.dummy.DummyContent;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Large screen devices (such as tablets) are supported by replacing the ListView
- * with a GridView.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
- * interface.
- */
 public class AlarmFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -105,10 +96,14 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         super.onDetach();
     }
 
+
+
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
+
 
     /**
      * The default content for this Fragment has a TextView that is shown when
@@ -123,19 +118,5 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
-    }
 
 }

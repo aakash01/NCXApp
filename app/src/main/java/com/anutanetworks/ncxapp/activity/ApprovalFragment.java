@@ -1,8 +1,10 @@
 package com.anutanetworks.ncxapp.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,19 @@ import android.widget.TextView;
 import com.anutanetworks.ncxapp.R;
 
 import com.anutanetworks.ncxapp.activity.dummy.DummyContent;
+import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ApprovalFragment extends Fragment implements AbsListView.OnItemClickListener {
 
+
+    ProgressDialog progressDialog;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,10 +76,37 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading babua...");
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+
+        AnutaRestClient.get("/rest/tenants", null,  new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers,  JSONObject response) {
+                Log.d("something","someting");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers,  JSONArray response) {
+                try {
+
+                    progressDialog.hide();
+                  JSONObject obj =   response.getJSONObject(0);
+                    DummyContent.addItem(new DummyContent.DummyItem(obj.getString("name"), obj.getString("description")));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("something","someting");
+                mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
+                        android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+
     }
 
     @Override

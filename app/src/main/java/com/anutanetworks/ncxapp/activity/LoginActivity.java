@@ -11,10 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
+import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.anutanetworks.ncxapp.services.ValidationUtils;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 
@@ -73,34 +72,21 @@ public class LoginActivity extends Activity {
         }
     }
 
-    public void validateLogin(Map<String, String> paramMap){
+    public void validateLogin(final Map<String, String> paramMap){
         progressDialog.show();
-        AsyncHttpClient client = new AsyncHttpClient();
-        String baseUrl = paramMap.get("host_url");
-        String actualUsername = paramMap.get("username");
-        String password = paramMap.get("password");
-        String organization = paramMap.get("organization");
+        AnutaRestClient.initializeClient(paramMap);
 
-        if(ValidationUtils.isNotNull(organization)){
-            actualUsername += "|" + organization;
-        }
-
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("AnutaAPIVersion","2.0");
-        client.setBasicAuth(actualUsername, password);
-
-        client.post(baseUrl + "/login", requestParams, new AsyncHttpResponseHandler() {
+        AnutaRestClient.post("/login", null, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 progressDialog.hide();
                 Toast.makeText(getApplicationContext(), "You are successfully logged in!", Toast.LENGTH_LONG).show();
-                navigatetoMainActivity();
+                navigatetoMainActivity(paramMap);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 progressDialog.hide();
-
                 if(statusCode == 401){
                     errorMsg.setText("Invalid username / password");
                     Toast.makeText(getApplicationContext(), "Authentication Failure", Toast.LENGTH_LONG).show();
@@ -111,14 +97,16 @@ public class LoginActivity extends Activity {
                 else{
                     Toast.makeText(getApplicationContext(), "Unexpected Error occcured!", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }
 
-    public void navigatetoMainActivity(){
+    public void navigatetoMainActivity(Map<String,String> paramMap){
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
+        for(String key : paramMap.keySet()){
+            editor.putString(key,paramMap.get(key));
+        }
         editor.putString("logged", "logged");
         editor.commit();
 

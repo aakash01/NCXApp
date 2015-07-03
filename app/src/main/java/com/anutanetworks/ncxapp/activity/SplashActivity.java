@@ -6,10 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.anutanetworks.ncxapp.R;
-import com.anutanetworks.ncxapp.activity.LoginActivity;
-import com.anutanetworks.ncxapp.activity.MainActivity;
+import com.anutanetworks.ncxapp.services.AnutaRestClient;
 
-import java.util.logging.Handler;
+import java.util.Map;
 
 /**
  * Created by Aakash on 7/2/2015.
@@ -28,7 +27,9 @@ public class SplashActivity extends Activity{
 
                     sleep(5*1000);
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                    if (settings.getString("logged", "").toString().equals("logged")) {
+                    if (settings.getString("logged", "").equals("logged")) {
+                        Map<String,String> settingValues = (Map<String, String>) settings.getAll();
+                        AnutaRestClient.initializeClient(settingValues);
                         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
