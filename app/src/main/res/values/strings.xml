@@ -19,7 +19,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_alarms">Alarms</string>
     <string name="title_approvals">Approvals</string>
-
     <string name="title_activity_login">Login</string>
     <string name="login_title">Login</string>
     <string name="host_url">Host Url</string>

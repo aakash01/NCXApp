@@ -3,6 +3,7 @@ package com.anutanetworks.ncxapp.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -32,11 +33,14 @@ public class LoginActivity extends Activity {
     EditText usernameText;
     EditText passwordText;
     EditText organizationText;
+    public static final String PREFS_NAME = "LoginPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
+
 
         errorMsg = (TextView)findViewById(R.id.login_error);
         hostUrlText = (EditText)findViewById(R.id.login_hosturl);
@@ -113,6 +117,11 @@ public class LoginActivity extends Activity {
     }
 
     public void navigatetoMainActivity(){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("logged", "logged");
+        editor.commit();
+
         Intent mainIntent = new Intent(getApplicationContext(),MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent);
