@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_dashboard);
                 break;
             case 1:
-                fragment = new ApprovalFragment();
+                fragment = new AlarmFragment();
                 title = getString(R.string.title_alarms);
                 break;
             case 2:
-                fragment = new AlarmFragment();
+                fragment = new ApprovalFragment();
                 title = getString(R.string.title_approvals);
                 break;
             default:
