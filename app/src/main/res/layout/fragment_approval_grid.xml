@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.anutanetworks.ncxapp.activity.ApprovalFragment">
 
-    <GridView android:id="@android:id/list" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:numColumns="2" />
+    <GridView android:id="@+id/list" android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <TextView android:id="@android:id/empty" android:layout_width="match_parent"
+    <TextView android:id="@+id/empty" android:layout_width="match_parent"
         android:layout_height="match_parent" android:gravity="center" />
 
 </FrameLayout>

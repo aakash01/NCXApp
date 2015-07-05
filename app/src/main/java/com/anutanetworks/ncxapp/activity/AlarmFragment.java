@@ -1,8 +1,10 @@
 package com.anutanetworks.ncxapp.activity;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,21 @@ import android.widget.TextView;
 import com.anutanetworks.ncxapp.R;
 
 import com.anutanetworks.ncxapp.activity.dummy.DummyContent;
+import com.anutanetworks.ncxapp.adapter.AlarmGridAdapter;
+import com.anutanetworks.ncxapp.model.Alarm;
+import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlarmFragment extends Fragment implements AbsListView.OnItemClickListener {
 
@@ -37,7 +54,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private AlarmGridAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     public static AlarmFragment newInstance(String param1, String param2) {
@@ -66,8 +83,42 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         }
 
         // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+
+         mAdapter = new AlarmGridAdapter(getActivity(), new ArrayList<Alarm>());
+
+        AnutaRestClient.get("/rest/alarms", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    Object val = response.get("data");
+                    final ArrayList<Alarm> alarms = objectMapper.readValue(val.toString(), new TypeReference<List<Alarm>>() {
+                    });
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            mAdapter.updateAlarmEntries(alarms);
+                        }
+                    });
+
+                }catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                Log.d("something", "someting");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+
     }
 
     @Override
@@ -76,7 +127,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         View view = inflater.inflate(R.layout.fragment_alarm, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        mListView = (AbsListView) view.findViewById(R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
@@ -118,5 +169,15 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         }
     }
 
+    class AlarmList{
+        private List<Alarm> alarms;
 
+        public List<Alarm> getAlarms() {
+            return alarms;
+        }
+
+        public void setAlarms(List<Alarm> alarms) {
+            this.alarms = alarms;
+        }
+    }
 }

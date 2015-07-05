@@ -25,7 +25,7 @@ public class SplashActivity extends Activity{
 
                 try {
 
-                    sleep(5*1000);
+                    sleep(2*1000);
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
                     if (settings.getString("logged", "").equals("logged")) {
                         Map<String,String> settingValues = (Map<String, String>) settings.getAll();

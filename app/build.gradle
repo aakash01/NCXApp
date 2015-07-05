@@ -4,6 +4,11 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
+    packagingOptions{
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+
     defaultConfig {
         applicationId "com.anutanetworks.ncxapp"
         minSdkVersion 14
@@ -24,4 +29,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.loopj.android:android-async-http:1.4.6'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.4'
 }

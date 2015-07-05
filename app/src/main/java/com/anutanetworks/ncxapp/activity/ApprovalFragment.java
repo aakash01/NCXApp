@@ -78,6 +78,7 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
         }
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading babua...");
+        progressDialog.show();
         // TODO: Change Adapter to display your content
 
         AnutaRestClient.get("/rest/tenants", null,  new JsonHttpResponseHandler() {
@@ -115,7 +116,7 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
         View view = inflater.inflate(R.layout.fragment_approval, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        mListView = (AbsListView) view.findViewById(R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
