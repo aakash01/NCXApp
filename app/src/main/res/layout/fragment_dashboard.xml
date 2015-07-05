@@ -26,6 +26,6 @@
         android:textSize="12dp"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
-        android:text="Edit fragment_dashboard.xml to change the appearance" />
+        android:text="Main Dashboard- Change it later." />
 
 </RelativeLayout>
