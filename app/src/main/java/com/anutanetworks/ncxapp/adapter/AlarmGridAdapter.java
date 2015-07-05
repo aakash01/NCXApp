@@ -1,12 +1,12 @@
 package com.anutanetworks.ncxapp.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anutanetworks.ncxapp.R;
@@ -55,13 +55,46 @@ public class AlarmGridAdapter extends ArrayAdapter{
 
         if (convertView == null) {
             gridItemView = new View(context);
-            gridItemView = inflater.inflate(R.layout.fragment_alarm_grid_item, null);
-            TextView textView = (TextView) gridItemView
-                    .findViewById(R.id.grid_item_label1);
-            textView.setText(alarms.get(position).getAlarmSpecType());
-            TextView textView2 = (TextView) gridItemView
-                    .findViewById(R.id.grid_item_label2);
-            textView2.setText(alarms.get(position).getMessage());
+            gridItemView = inflater.inflate(R.layout.fragment_alarm_list_item, null);
+
+            Alarm alarmRecord = alarms.get(position);
+
+            TextView alarmComponent = (TextView) gridItemView
+                    .findViewById(R.id.component);
+            alarmComponent.setText(alarmRecord.getComponent());
+            TextView alarmSpecType = (TextView) gridItemView
+                    .findViewById(R.id.alarmtype);
+            alarmSpecType.setText(alarmRecord.getAlarmSpecType());
+            TextView alarmState = (TextView) gridItemView
+                    .findViewById(R.id.alarmstate);
+            alarmState.setText(alarmRecord.getAlarmState());
+            TextView severityType = (TextView) gridItemView
+                    .findViewById(R.id.severityType);
+            severityType.setText(alarmRecord.getSeverity());
+            if("ACTIVE".equals(alarmRecord.getAlarmState())){
+                alarmState.setTextColor(Color.parseColor("#B71C1C"));
+            }else if("CLEARED".equals(alarmRecord.getAlarmState())){
+                alarmState.setTextColor(Color.parseColor("#00C853"));
+            }
+            if(alarmRecord.isAcknowledged()) {
+                gridItemView.setBackgroundResource(R.color.transp);
+            }
+
+            ImageView severityIcon = (ImageView) gridItemView.findViewById(R.id.severityIcon);
+            switch (alarmRecord.getSeverity()){
+                case "CRITICAL":
+                    severityIcon.setImageResource(R.drawable.ic_severity_critical);
+                    break;
+                case "MAJOR":
+                    severityIcon.setImageResource(R.drawable.ic_severity_major);
+                    break;
+                case "WARNING":
+                case "MINOR":
+                    severityIcon.setImageResource(R.drawable.ic_severity_minor);
+                    break;
+                case "INFO":
+                    severityIcon.setImageResource(R.drawable.ic_severity_info);
+            }
 
         } else {
             gridItemView = (View) convertView;

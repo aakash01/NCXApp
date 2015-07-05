@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/severityIcon"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginRight="5dp"
+        android:maxHeight="50dp"
+        android:maxWidth="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="alarmtype"
+        android:id="@+id/severityType"
+        android:layout_below="@+id/severityIcon"
+        android:layout_alignParentLeft="true"
+        android:textSize="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="component"
+        android:id="@+id/component"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/severityIcon"
+        android:layout_toEndOf="@+id/severityIcon"
+        android:textSize="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="alarmtype"
+        android:id="@+id/alarmtype"
+        android:layout_below="@+id/component"
+        android:layout_toRightOf="@+id/severityIcon"
+        android:layout_toEndOf="@+id/severityIcon"
+        android:textSize="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="alarm state"
+        android:id="@+id/alarmstate"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="10dp" />
+</RelativeLayout>
+
+
