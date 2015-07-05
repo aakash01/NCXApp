@@ -17,7 +17,11 @@ import android.widget.TextView;
 import com.anutanetworks.ncxapp.R;
 
 import com.anutanetworks.ncxapp.activity.dummy.DummyContent;
+import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
+import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -25,6 +29,10 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApprovalFragment extends Fragment implements AbsListView.OnItemClickListener {
 
@@ -49,7 +57,7 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ApprovalGridAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     public static ApprovalFragment newInstance(String param1, String param2) {
@@ -76,31 +84,35 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Loading babua...");
-        progressDialog.show();
-        // TODO: Change Adapter to display your content
-
-        AnutaRestClient.get("/rest/tenants", null,  new JsonHttpResponseHandler() {
+       mAdapter=new ApprovalGridAdapter(getActivity(),new ArrayList<Approval>());
+        AnutaRestClient.get("/rest/workflowtasks", null,  new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers,  JSONObject response) {
-                Log.d("something","someting");
+
+
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers,  JSONArray response) {
-                try {
+                try{
 
-                    progressDialog.hide();
-                  JSONObject obj =   response.getJSONObject(0);
-                    DummyContent.addItem(new DummyContent.DummyItem(obj.getString("name"), obj.getString("description")));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    ObjectMapper objectMapper1 = new ObjectMapper();
+                   Object val1 = response.toString();
+                    final ArrayList<Approval> approvals = objectMapper1.readValue(val1.toString(), new TypeReference<List<Approval>>() {
+                });
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            mAdapter.updateApprovalEntries(approvals);
+                        }
+                    });
+
                 }
-                Log.d("something","someting");
-                mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                        android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
-            }
+                catch (IOException e){
+                    e.printStackTrace();
+                 }
+
+
+                 }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
@@ -157,6 +169,15 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
             ((TextView) emptyView).setText(emptyText);
         }
     }
+class ApprovalList{
 
+    private List<Approval> approvals;
+    public List<Approval> getApprovals(){
+        return approvals;
+    }
+    public void setApprovals(List<Approval> approvals){
+        this.approvals=approvals;
+    }
+}
 
 }
