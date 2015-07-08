@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new ApprovalFragment();
                 title = getString(R.string.title_approvals);
                 break;
+
             default:
                 break;
         }

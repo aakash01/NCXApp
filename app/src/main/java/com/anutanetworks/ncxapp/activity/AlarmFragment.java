@@ -1,6 +1,7 @@
 package com.anutanetworks.ncxapp.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.activity.dummy.DummyContent;
 import com.anutanetworks.ncxapp.adapter.AlarmGridAdapter;
 import com.anutanetworks.ncxapp.model.Alarm;
+import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -153,7 +155,17 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-    }
+            Alarm item = (Alarm)mAdapter.getItem(position);
+            String aid=item.getId();
+            Intent i = new Intent(view.getContext(),AlarmActivity.class);
+            i.putExtra("id",aid);
+
+            startActivity(i);
+
+
+        }
+
+
 
 
     /**

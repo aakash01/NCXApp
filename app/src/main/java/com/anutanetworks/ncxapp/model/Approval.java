@@ -2,6 +2,9 @@ package com.anutanetworks.ncxapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Aakash on 7/5/2015.
  */
@@ -15,6 +18,9 @@ public class Approval {
     private String approved;
     private String description;
     private String resName;
+    private List<TaskApprover> taskApprovers;
+    private List<SubUserTask> subTasks = new ArrayList<SubUserTask>();
+
 
     public String getId() {
         return id;
@@ -26,6 +32,21 @@ public class Approval {
 
     public String getProcessName() {
         return processName;
+    }
+
+    public List<TaskApprover> getTaskApprovers() {
+        return taskApprovers;
+    }
+
+    public void setTaskApprovers(List<TaskApprover> taskApprovers) {
+        this.taskApprovers = taskApprovers;
+    }
+    public List<SubUserTask> getSubTasks() {
+        return subTasks;
+    }
+
+    public void setSubTasks(List<SubUserTask> subTasks) {
+        this.subTasks = subTasks;
     }
 
     public void setProcessName(String processName) {

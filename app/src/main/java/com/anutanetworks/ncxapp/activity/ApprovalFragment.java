@@ -2,8 +2,12 @@ package com.anutanetworks.ncxapp.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,39 +84,40 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
        mAdapter=new ApprovalGridAdapter(getActivity(),new ArrayList<Approval>());
-        AnutaRestClient.get("/rest/workflowtasks", null,  new JsonHttpResponseHandler() {
+        AnutaRestClient.get("/rest/workflowtasks", null, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers,  JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
 
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers,  JSONArray response) {
-                try{
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                try {
 
                     ObjectMapper objectMapper1 = new ObjectMapper();
-                   Object val1 = response.toString();
+                    Object val1 = response.toString();
                     final ArrayList<Approval> approvals = objectMapper1.readValue(val1.toString(), new TypeReference<List<Approval>>() {
-                });
+                    });
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             mAdapter.updateApprovalEntries(approvals);
                         }
                     });
 
-                }
-                catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
-                 }
+                }
 
 
-                 }
+            }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
@@ -133,7 +138,6 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-
         return view;
     }
 
@@ -152,9 +156,19 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
 
 
     @Override
+
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        Approval item = (Approval)mAdapter.getItem(position);
+        String aid=item.getId();
+        Intent i = new Intent(view.getContext(),ApprovalActivity.class);
+        i.putExtra("id",aid);
+
+        startActivity(i);
+
+
     }
+
 
 
     /**

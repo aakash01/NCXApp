@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.anutanetworks.ncxapp.R;
+import com.anutanetworks.ncxapp.model.AlarmsSummary;
 import com.anutanetworks.ncxapp.model.TasksSummary;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +21,7 @@ import org.json.JSONObject;
 /**
  * Created by Aakash on 7/7/2015.
  */
-public class SummaryDesignFragment extends Fragment {
+public class   SummaryDesignFragment extends Fragment {
 
 
    View view = null;
@@ -40,7 +41,7 @@ public class SummaryDesignFragment extends Fragment {
                final TasksSummary tasksSummary = objectMapper.readValue(response.toString(), TasksSummary.class);
                getActivity().runOnUiThread(new Runnable() {
                   @Override public void run() {
-                     addData(tasksSummary);
+                     updateSystemSummaryData(tasksSummary);
                   }
                });
 
@@ -57,22 +58,66 @@ public class SummaryDesignFragment extends Fragment {
             super.onFailure(statusCode, headers, throwable, errorResponse);
          }
       });
+
+
+      AnutaRestClient.get("/rest/alarms/summary", null, new JsonHttpResponseHandler() {
+         @Override
+         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            try {
+               ObjectMapper objectMapper = new ObjectMapper();
+               final AlarmsSummary alarmsSummary = objectMapper.readValue(response.toString(), AlarmsSummary.class);
+               getActivity().runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                     updateAlarmSummaryData(alarmsSummary);
+                  }
+               });
+
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+         }
+
+         @Override
+         public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+         }
+
+         @Override
+         public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                               JSONObject errorResponse) {
+            super.onFailure(statusCode, headers, throwable, errorResponse);
+         }
+      });
       return view;
    }
 
-   private void addData(TasksSummary tasksSummary) {
-      TextView tenantCount = (TextView) view.findViewById(R.id.tenantCountText);
+   private void updateSystemSummaryData(TasksSummary tasksSummary) {
+      TextView tenantCount = (TextView) view.findViewById(R.id.summarytenant);
       tenantCount.setText(String.valueOf(tasksSummary.getTenants()));
-      TextView vdcCountText = (TextView) view.findViewById(R.id.vdcCountText);
+      TextView vdcCountText = (TextView) view.findViewById(R.id.summaryvdc);
       vdcCountText.setText(String.valueOf(tasksSummary.getVdcs()));
-      TextView vmsCountText = (TextView) view.findViewById(R.id.vmsCountText);
+      TextView vmsCountText = (TextView) view.findViewById(R.id.summaryVms);
       vmsCountText.setText(String.valueOf(tasksSummary.getVms()));
-      TextView runningTasksText = (TextView) view.findViewById(R.id.runningTaskCountText);
+      TextView runningTasksText = (TextView) view.findViewById(R.id.summaryRunning);
       runningTasksText.setText(String.valueOf(tasksSummary.getTasksRunning()));
-      TextView waitingTasksText = (TextView) view.findViewById(R.id.waitingTaskCountText);
+      TextView waitingTasksText = (TextView) view.findViewById(R.id.summaryWaiting);
       waitingTasksText.setText(String.valueOf(tasksSummary.getTasksWaiting()));
-      TextView errorTasksText = (TextView) view.findViewById(R.id.errorTaskCountText);
+      TextView errorTasksText = (TextView) view.findViewById(R.id.summaryError);
       errorTasksText.setText(String.valueOf(tasksSummary.getTasksError()));
+   }
+
+
+   private void updateAlarmSummaryData(AlarmsSummary alarmsSummary) {
+      TextView alarmCritical = (TextView) view.findViewById(R.id.alarmCritical);
+      alarmCritical.setText(String.valueOf(alarmsSummary.getCritical()));
+      TextView alarmWarning = (TextView) view.findViewById(R.id.alarmWarning);
+      alarmWarning.setText(String.valueOf(alarmsSummary.getWarning()));
+      TextView alarmMajor = (TextView) view.findViewById(R.id.alarmMajor);
+      alarmMajor.setText(String.valueOf(alarmsSummary.getMajor()));
+      TextView alarmMinor = (TextView) view.findViewById(R.id.alarmMinor);
+      alarmMinor.setText(String.valueOf(alarmsSummary.getMinor()));
+      TextView alarminfo = (TextView) view.findViewById(R.id.alarmInfo);
+      alarminfo.setText(String.valueOf(alarmsSummary.getInfo()));
    }
 
 }
