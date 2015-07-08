@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Summary"
+            android:id="@+id/summary" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:textSize="24dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:singleLine="true"
+              android:text=""
+              android:id="@+id/tenantCountText"
+              android:background="@drawable/ic_severity_info"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textColor="#ffffffff"
+              android:layout_below="@+id/summary" android:layout_toLeftOf="@+id/summary"
+              android:layout_toStartOf="@+id/summary" android:layout_marginTop="71dp" android:textAlignment="center"
+              android:gravity="center"/>
+
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tenants"
+            android:id="@+id/textView" android:layout_below="@+id/tenantCountText"
+            android:layout_toLeftOf="@+id/summary" android:layout_toStartOf="@+id/summary" android:textStyle="bold"
+            android:textAlignment="center"
+            android:typeface="sans"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:singleLine="true"
+              android:text=""
+              android:id="@+id/vdcCountText"
+              android:background="@drawable/ic_severity_info"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textColor="#ffffffff"
+              android:layout_below="@+id/summary" android:layout_toRightOf="@+id/summary"
+              android:layout_marginTop="71dp" android:textAlignment="center"
+              android:gravity="center"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   VDCs"
+            android:id="@+id/textView1"
+            android:layout_below="@+id/vdcCountText" android:layout_toRightOf="@+id/summary"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:typeface="sans"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:singleLine="true"
+              android:text=""
+              android:id="@+id/vmsCountText"
+              android:background="@drawable/ic_severity_info"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textColor="#ffffffff"
+              android:layout_below="@+id/tenantCountText" android:layout_toLeftOf="@+id/summary"
+              android:layout_toStartOf="@+id/summary" android:layout_marginTop="71dp" android:textAlignment="center"
+              android:gravity="center"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VMs    "
+            android:id="@+id/textView2" android:layout_below="@+id/vmsCountText"
+            android:layout_toLeftOf="@+id/summary" android:layout_toStartOf="@+id/vmsCountText" android:textStyle="bold"
+            android:textAlignment="center"
+            android:typeface="sans"/>
+
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:singleLine="true"
+              android:text=""
+              android:id="@+id/runningTaskCountText"
+              android:background="@drawable/ic_severity_info"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textColor="#ffffffff"
+              android:layout_below="@+id/vdcCountText" android:layout_toRightOf="@+id/summary"
+              android:layout_marginTop="71dp" android:textAlignment="center"
+              android:gravity="center"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Running Tasks"
+            android:id="@+id/textView3"
+            android:layout_below="@+id/runningTaskCountText" android:layout_toRightOf="@+id/summary"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:typeface="sans"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:singleLine="true"
+              android:text=""
+              android:id="@+id/waitingTaskCountText"
+              android:background="@drawable/ic_severity_info"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textColor="#ffffffff"
+              android:layout_below="@+id/vmsCountText" android:layout_toLeftOf="@+id/summary"
+              android:layout_toStartOf="@+id/summary" android:layout_marginTop="71dp" android:textAlignment="center"
+              android:gravity="center"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="               Waiting Tasks "
+            android:id="@+id/textView4" android:layout_below="@+id/waitingTaskCountText"
+            android:layout_centerInParent="@+id/waitingTaskCountText" android:textStyle="bold"
+            android:textAlignment="center"
+            android:typeface="sans"/>
+
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:singleLine="true"
+              android:text=""
+              android:id="@+id/errorTaskCountText"
+              android:background="@drawable/ic_severity_info"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textColor="#ffffffff"
+              android:layout_below="@+id/runningTaskCountText" android:layout_toRightOf="@+id/summary"
+              android:layout_marginTop="71dp" android:textAlignment="center"
+              android:gravity="center"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Error Tasks"
+            android:id="@+id/textView5"
+            android:layout_below="@+id/errorTaskCountText" android:layout_toRightOf="@+id/summary"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:typeface="sans"/>
+
+</RelativeLayout>

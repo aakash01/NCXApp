@@ -1,40 +1,55 @@
 package com.anutanetworks.ncxapp.activity;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.anutanetworks.ncxapp.R;
 
 public class DashboardFragment extends Fragment {
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    static final int NUM_ITEMS = 3;
 
+    private ViewPagerAdapter mAdapter;
+    private ViewPager mPager;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        mAdapter = new ViewPagerAdapter(getFragmentManager());
 
-        // Inflate the layout for this fragment
-        return rootView;
+        mPager = (ViewPager) getView().findViewById(R.id.pager);
+        mPager.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
+    public static class ViewPagerAdapter extends FragmentPagerAdapter {
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
+        @Override
+        public Fragment getItem(int num) {
+            if (num == 1) {
+                return new DeviceSummaryFragment();
+            } else if (num == 0){
+                return new ServiceSummaryFragment();
+            }else{
+                return new SummaryDesignFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
     }
 }
