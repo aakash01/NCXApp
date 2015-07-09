@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:id="@+id/riskHealthLayout" android:layout_margin="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="At Risk Pods By Health"
+                android:id="@+id/health_txt"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:textSize="24dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/riskhealthrow1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/alarm_txt"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="35dp">
+
+
+                <LinearLayout
+                    android:id="@+id/eastctr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/health1"
+                        android:background="@drawable/healthred"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/healthtxt1"
+                        android:textStyle="normal"
+                        android:textSize="20dp" android:layout_gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/haCtr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/eastctr"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/health2"
+                        android:background="@drawable/healthred"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/healthtxt2"
+                        android:layout_below="@+id/health2"
+                        android:textStyle="normal"
+                        android:textSize="20dp"  android:layout_gravity="center"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/pslCtr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/health3"
+                        android:background="@drawable/healthred"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/healthtxt3"
+                        android:textStyle="normal"
+                        android:textSize="20dp" android:layout_gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/riskhealthrow2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/riskhealthrow1"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="45dp">
+
+                <LinearLayout
+                    android:id="@+id/mpCtr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/eastctr"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/health4"
+                        android:background="@drawable/healthred"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/healthtxt4"
+                        android:textStyle="normal"
+                        android:textSize="20dp"  android:layout_gravity="center"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ubcCtr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/health5"
+                        android:background="@drawable/healthred"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/healthtxt5"
+                        android:textStyle="normal"
+                        android:textSize="20dp" android:layout_gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+      </RelativeLayout>
+
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:id="@+id/riskcapacityLayout" android:layout_margin="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="At Risk Pods By Utilized Capacity"
+            android:id="@+id/capacity_txt"
+            android:textSize="24dp"
+            android:textStyle="bold"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/riskcapacityrow1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/capacity_txt"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="35dp">
+            <LinearLayout
+                android:id="@+id/catalystCtr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:layout_weight="1.0" >
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text=""
+                    android:id="@+id/util1"
+                    android:background="@drawable/capacitygreen"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffffff"
+                    android:textAlignment="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/capacitytxt1"
+                    android:textStyle="normal"
+                    android:textSize="20dp" android:layout_gravity="center" />
+            </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/ubc1Ctr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/catalystCtr"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/util2"
+                        android:background="@drawable/capacitygreen"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/capacitytxt2"
+                        android:layout_below="@+id/util2"
+                        android:textStyle="normal"
+                        android:textSize="20dp"  android:layout_gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/psl1Ctr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/util3"
+                        android:background="@drawable/capacitygreen"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/capacitytxt3"
+                        android:textStyle="normal"
+                        android:textSize="20dp" android:layout_gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/riskcapacityrow2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/riskcapacityrow1"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="45dp">
+
+                <LinearLayout
+                    android:id="@+id/mixCtr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/catalystCtr"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/util4"
+                        android:background="@drawable/capacitygreen"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/capacitytxt4"
+                        android:textStyle="normal"
+                        android:textSize="20dp"  android:layout_gravity="center"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ha1ctr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:layout_weight="1.0" >
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:singleLine="true"
+                        android:text=""
+                        android:id="@+id/util5"
+                        android:background="@drawable/capacitygreen"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#ffffffff"
+                        android:textAlignment="center"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/capacitytxt5"
+                        android:textStyle="normal"
+                        android:textSize="20dp" android:layout_gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+</RelativeLayout>
+
+
+
+
+
+
+        <RelativeLayout android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:id="@+id/riskworkloadLayout" android:layout_margin="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="At Risk Pods By Workload"
+            android:id="@+id/workload_txt"
+            android:textSize="24dp"
+            android:textStyle="bold"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/riskworkrow1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/workload_txt"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="35dp">
+            <LinearLayout
+                android:id="@+id/workpslCtr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:layout_weight="1.0" >
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text=""
+                    android:id="@+id/work1"
+                    android:background="@drawable/workloadgreen"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffffff"
+                    android:textAlignment="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/worktxt1"
+                    android:textStyle="normal"
+                    android:textSize="20dp" android:layout_gravity="center" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/workmixCtr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/workpslCtr"
+                android:orientation="vertical"
+                android:layout_weight="1.0" >
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text=""
+                    android:id="@+id/work2"
+                    android:background="@drawable/workloadgreen"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffffff"
+                    android:textAlignment="center"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/worktxt2"
+                    android:layout_below="@+id/work2"
+                    android:textStyle="normal"
+                    android:textSize="20dp"  android:layout_gravity="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/workhaCtr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:layout_weight="1.0" >
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text=""
+                    android:id="@+id/work3"
+                    android:background="@drawable/workloadgreen"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffffff"
+                    android:textAlignment="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/worktxt3"
+                    android:textStyle="normal"
+                    android:textSize="20dp" android:layout_gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/riskworkrow2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/riskworkrow1"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="45dp">
+
+            <LinearLayout
+                android:id="@+id/worknexusCtr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/workhaCtr"
+                android:orientation="vertical"
+                android:layout_weight="1.0" >
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text=""
+                    android:id="@+id/work4"
+                    android:background="@drawable/workloadgreen"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffffff"
+                    android:textAlignment="center"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/worktxt4"
+                    android:textStyle="normal"
+                    android:textSize="20dp"  android:layout_gravity="center"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/workubcctr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:layout_weight="1.0" >
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text=""
+                    android:id="@+id/work5"
+                    android:background="@drawable/workloadgreen"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffffffff"
+                    android:textAlignment="center"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/worktxt5"
+                    android:textStyle="normal"
+                    android:textSize="20dp" android:layout_gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+        </RelativeLayout>
+
+
+</LinearLayout>
+
+</ScrollView>

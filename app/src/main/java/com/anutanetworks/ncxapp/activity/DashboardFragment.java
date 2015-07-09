@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.anutanetworks.ncxapp.R;
 
 public class DashboardFragment extends Fragment {
-    static final int NUM_ITEMS = 5;
+    static final int NUM_ITEMS = 4;
 
     private ViewPagerAdapter mAdapter;
     private ViewPager mPager;
@@ -38,18 +38,15 @@ public class DashboardFragment extends Fragment {
 
         @Override
         public Fragment getItem(int num) {
-            if (num == 3) {
-                return new DeviceSummaryFragment();
-            } else if (num == 2){
-                return new ServiceSummaryFragment();
-            }else if(num == 1){
+            if (num == 2) {
+                return new RiskActivityFragment();
+            } else if (num == 1){
                 return new SummaryDesignFragment();
-            }
-            else if(num == 0){
-              return new AlarmSummaryFragment();
+            }else if(num == 0){
+                return new ServiceSummaryFragment();
             }
             else {
-                return new RiskActivityFragment();
+                return new DeviceSummaryFragment();
             }
         }
 
