@@ -1,8 +1,6 @@
 package com.anutanetworks.ncxapp.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -15,11 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.NavigationDrawerAdapter;
 import com.anutanetworks.ncxapp.model.NavDrawerItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +28,7 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private static String[] titles = null;
+    private static String[] icons = null;
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {
@@ -50,6 +47,7 @@ public class FragmentDrawer extends Fragment {
         for (int i = 0; i < titles.length; i++) {
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles[i]);
+            navItem.setIcon(icons[i]);
             data.add(navItem);
         }
         return data;
@@ -61,6 +59,7 @@ public class FragmentDrawer extends Fragment {
 
         // drawer labels
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
+        icons = getActivity().getResources().getStringArray(R.array.nav_drawer_labels_icon);
     }
 
     @Override
@@ -77,6 +76,7 @@ public class FragmentDrawer extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 drawerListener.onDrawerItemSelected(view, position);
+                mDrawerLayout.setSelected(true);
                 mDrawerLayout.closeDrawer(containerView);
             }
 

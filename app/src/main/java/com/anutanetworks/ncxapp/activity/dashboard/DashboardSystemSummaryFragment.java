@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +21,7 @@ import org.json.JSONObject;
 /**
  * Created by Aakash on 7/7/2015.
  */
-public class   SummaryDesignFragment extends Fragment {
+public class DashboardSystemSummaryFragment extends Fragment {
 
 
    View view = null;
@@ -61,14 +61,12 @@ public class   SummaryDesignFragment extends Fragment {
 
 
       AnutaRestClient.get("/rest/alarms/summary", null, new JsonHttpResponseHandler() {
-         @Override
-         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+         @Override public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             try {
                ObjectMapper objectMapper = new ObjectMapper();
                final AlarmsSummary alarmsSummary = objectMapper.readValue(response.toString(), AlarmsSummary.class);
                getActivity().runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
+                  @Override public void run() {
                      updateAlarmSummaryData(alarmsSummary);
                   }
                });
@@ -78,13 +76,11 @@ public class   SummaryDesignFragment extends Fragment {
             }
          }
 
-         @Override
-         public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+         @Override public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
          }
 
-         @Override
-         public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                               JSONObject errorResponse) {
+         @Override public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
             super.onFailure(statusCode, headers, throwable, errorResponse);
          }
       });

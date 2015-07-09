@@ -78,20 +78,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private void displayView(int position) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
+        int icon = 0;
         switch (position) {
             case 0:
                 fragment = new DashboardFragment();
                 title = getString(R.string.title_dashboard);
+                icon = R.drawable.ic_dashboard_active;
                 break;
             case 1:
                 fragment = new AlarmFragment();
                 title = getString(R.string.title_alarms);
+                icon = R.drawable.ic_alarm_active;
                 break;
             case 2:
                 fragment = new ApprovalFragment();
                 title = getString(R.string.title_approvals);
+                icon = R.drawable.ic_approval_active;
                 break;
-
             default:
                 break;
         }
@@ -103,6 +106,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             fragmentTransaction.commit();
 
             // set the toolbar title
+            if(icon != 0) {
+                getSupportActionBar().setIcon(icon);
+            }
+            getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setTitle(title);
         }
     }

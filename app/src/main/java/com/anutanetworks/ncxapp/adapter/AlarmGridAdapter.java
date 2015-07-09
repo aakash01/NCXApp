@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.Alarm;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,9 +66,9 @@ public class AlarmGridAdapter extends ArrayAdapter{
             TextView alarmState = (TextView) gridItemView
                     .findViewById(R.id.alarmstate);
             alarmState.setText(alarmRecord.getAlarmState());
-            TextView severityType = (TextView) gridItemView
+            /*TextView severityType = (TextView) gridItemView
                     .findViewById(R.id.severityType);
-            severityType.setText(alarmRecord.getSeverity());
+            severityType.setText(alarmRecord.getSeverity());*/
             if("ACTIVE".equals(alarmRecord.getAlarmState())){
                 alarmState.setTextColor(Color.parseColor("#B71C1C"));
             }else if("CLEARED".equals(alarmRecord.getAlarmState())){
@@ -83,17 +81,19 @@ public class AlarmGridAdapter extends ArrayAdapter{
             ImageView severityIcon = (ImageView) gridItemView.findViewById(R.id.severityIcon);
             switch (alarmRecord.getSeverity()){
                 case "CRITICAL":
-                    severityIcon.setImageResource(R.drawable.ic_severity_critical);
+                    severityIcon.setImageResource(R.drawable.ic_critical_48px);
                     break;
                 case "MAJOR":
-                    severityIcon.setImageResource(R.drawable.ic_severity_major);
+                    severityIcon.setImageResource(R.drawable.ic_major_48px);
                     break;
                 case "WARNING":
+                    severityIcon.setImageResource(R.drawable.ic_warning_48px);
+                    break;
                 case "MINOR":
-                    severityIcon.setImageResource(R.drawable.ic_severity_minor);
+                    severityIcon.setImageResource(R.drawable.ic_minor_48px);
                     break;
                 case "INFO":
-                    severityIcon.setImageResource(R.drawable.ic_severity_info);
+                    severityIcon.setImageResource(R.drawable.ic_info_48px);
             }
 
         } else {

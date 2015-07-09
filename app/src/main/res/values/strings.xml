@@ -9,11 +9,21 @@
     <string name="nav_item_alarms">Alarms</string>
     <string name="nav_item_approvals">Approvals</string>
 
+    <string name="nav_item_dashboard_icon">ic_dashboard</string>
+    <string name="nav_item_alarms_icon">ic_alarm</string>
+    <string name="nav_item_approvals_icon">ic_approval</string>
+
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_dashboard</item>
         <item>@string/nav_item_alarms</item>
         <item>@string/nav_item_approvals</item>
+    </string-array>
+
+    <string-array name="nav_drawer_labels_icon">
+        <item>@string/nav_item_dashboard_icon</item>
+        <item>@string/nav_item_alarms_icon</item>
+        <item>@string/nav_item_approvals_icon</item>
     </string-array>
 
     <string name="title_dashboard">Dashboard</string>

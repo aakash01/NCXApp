@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.anutanetworks.ncxapp.R;
-import com.anutanetworks.ncxapp.activity.SummaryDesignFragment;
 
 public class DashboardFragment extends Fragment {
     static final int NUM_ITEMS = 4;
@@ -43,7 +42,7 @@ public class DashboardFragment extends Fragment {
             case 0:
                 return new DashboardServicesSummaryFragment();
             case 1:
-                return new SummaryDesignFragment();
+                return new DashboardSystemSummaryFragment();
             case 2:
                 return new DashboardRiskActivityFragment();
             case 3:
