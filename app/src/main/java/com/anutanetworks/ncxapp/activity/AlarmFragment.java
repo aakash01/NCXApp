@@ -2,7 +2,6 @@ package com.anutanetworks.ncxapp.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,29 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-
 import com.anutanetworks.ncxapp.R;
-
-import com.anutanetworks.ncxapp.activity.dummy.DummyContent;
 import com.anutanetworks.ncxapp.adapter.AlarmGridAdapter;
 import com.anutanetworks.ncxapp.model.Alarm;
-import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AlarmFragment extends Fragment implements AbsListView.OnItemClickListener {
 

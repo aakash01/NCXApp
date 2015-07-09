@@ -1,16 +1,12 @@
 package com.anutanetworks.ncxapp.services;
 
+import android.content.Context;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.loopj.android.http.ResponseHandlerInterface;
 import java.util.Map;
+import org.apache.http.HttpEntity;
 
 /**
  * Created by Aakash on 7/3/2015.
@@ -44,6 +40,10 @@ public class AnutaRestClient {
 
     public static void post(String url,RequestParams requestParams, AsyncHttpResponseHandler responseHandler) {
         client.post(getAbsoluteUrl(url), requestParams, responseHandler);
+    }
+
+    public static void post(Context context, String url, HttpEntity entity, ResponseHandlerInterface responseHandler){
+        client.post(context, getAbsoluteUrl(url), entity, "application/json", responseHandler);
     }
 
     private static String getAbsoluteUrl(String relativeUrl) {

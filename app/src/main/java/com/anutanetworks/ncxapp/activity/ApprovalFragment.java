@@ -5,38 +5,26 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-
 import com.anutanetworks.ncxapp.R;
-
-import com.anutanetworks.ncxapp.activity.dummy.DummyContent;
 import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class ApprovalFragment extends Fragment implements AbsListView.OnItemClickListener {
 

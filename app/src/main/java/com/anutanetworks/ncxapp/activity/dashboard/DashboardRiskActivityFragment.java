@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.dashboard;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Created by Aakash on 7/8/2015.
  */
-public class RiskActivityFragment extends Fragment {
+public class DashboardRiskActivityFragment extends Fragment {
 
     View view = null;
     private List<Capacity> capacitylists;

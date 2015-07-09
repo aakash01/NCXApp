@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.dashboard;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.anutanetworks.ncxapp.R;
+import com.anutanetworks.ncxapp.activity.SummaryDesignFragment;
 
 public class DashboardFragment extends Fragment {
     static final int NUM_ITEMS = 4;
@@ -25,7 +26,7 @@ public class DashboardFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mAdapter = new ViewPagerAdapter(getFragmentManager());
+        mAdapter = new ViewPagerAdapter(getChildFragmentManager());
 
         mPager = (ViewPager) getView().findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
@@ -37,17 +38,32 @@ public class DashboardFragment extends Fragment {
         }
 
         @Override
-        public Fragment getItem(int num) {
-            if (num == 2) {
-                return new RiskActivityFragment();
-            } else if (num == 1){
+        public Fragment getItem(int pos) {
+            switch (pos) {
+            case 0:
+                return new DashboardServicesSummaryFragment();
+            case 1:
                 return new SummaryDesignFragment();
-            }else if(num == 0){
-                return new ServiceSummaryFragment();
+            case 2:
+                return new DashboardRiskActivityFragment();
+            case 3:
+                return new DashboardDeviceSummaryFragment();
             }
-            else {
-                return new DeviceSummaryFragment();
+            return null;
+        }
+
+        @Override public CharSequence getPageTitle(int position) {
+            switch (position) {
+            case 0:
+                return "Services - Top 5 in Utilization";
+            case 1:
+                return "System and Alarm Summary";
+            case 2:
+                return "At Risk Pods";
+            case 3:
+                return "Device summary by vendor";
             }
+            return "";
         }
 
         @Override

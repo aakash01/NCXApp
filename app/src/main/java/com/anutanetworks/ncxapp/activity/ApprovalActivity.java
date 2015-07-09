@@ -1,12 +1,8 @@
 package com.anutanetworks.ncxapp.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,27 +10,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.anutanetworks.ncxapp.R;
-
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.model.SubUserTask;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Aakash on 7/6/2015.
@@ -98,12 +88,20 @@ public class ApprovalActivity extends Activity implements View.OnClickListener {
                 public void onClick(View v) {
 
                    String msgs = txtmsg.getText().toString();
-                     RequestParams params=new RequestParams();
-                    params.put("message",msgs);
+                   JSONObject jsonParams = new JSONObject();
+                   StringEntity entity = null;
+                   try {
+                      jsonParams.put("notes", msgs);
+                      jsonParams.put("scheduleNow",true);
+                      jsonParams.put("reScheduleTask",true);
+                      entity = new StringEntity(jsonParams.toString());
+                   } catch (JSONException e) {
+                      e.printStackTrace();
+                   } catch (UnsupportedEncodingException e) {
+                      e.printStackTrace();
+                   }
 
-
-
-                    AnutaRestClient.post("/rest/workflowtasks/"+id+"/action/approve", params, new AsyncHttpResponseHandler() {
+                   AnutaRestClient.post(getApplicationContext(),"/rest/workflowtasks/"+id+"/action/approve", entity, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                             Toast.makeText(getApplicationContext(), "successfully approved!", Toast.LENGTH_LONG).show();

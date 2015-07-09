@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.dashboard;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,7 +29,7 @@ import org.json.JSONObject;
 /**
  * Created by Aakash on 7/6/2015.
  */
-public class ServiceSummaryFragment extends Fragment {
+public class DashboardServicesSummaryFragment extends Fragment {
 
    private BarChart mChart;
 

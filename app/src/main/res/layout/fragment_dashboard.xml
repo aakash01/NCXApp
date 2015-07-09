@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context="com.anutanetworks.ncxapp.activity.DashboardFragment">
+    tools:context="com.anutanetworks.ncxapp.activity.dashboard.DashboardFragment">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
@@ -12,14 +12,14 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.v4.view.PagerTitleStrip android:id="@+id/pager_title_strip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="#D50000"
-            android:textColor="#fff"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp" />
+        <android.support.v4.view.PagerTabStrip
+                android:id="@+id/pager_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:background="#D50000"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp" />
 
     </android.support.v4.view.ViewPager>
 
