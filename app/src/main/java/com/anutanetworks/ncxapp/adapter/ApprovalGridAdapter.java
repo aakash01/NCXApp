@@ -1,6 +1,7 @@
 package com.anutanetworks.ncxapp.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,13 +59,29 @@ public class ApprovalGridAdapter extends ArrayAdapter {
             Approval app = approvals.get(position);
             TextView textView = (TextView) gridItemView
                     .findViewById(R.id.actions);
-            textView.setText(app.getApproved());
+            //textView.setText(app.getApproved());
             TextView textView2 = (TextView) gridItemView
                     .findViewById(R.id.description);
             textView2.setText(app.getDescription());
             TextView textView3 = (TextView) gridItemView
                     .findViewById(R.id.originator);
             textView3.setText(app.getOriginator());
+
+            if("Rejected".equals(app.getApproved()))
+            {
+                textView.setText(app.getApproved());
+                textView.setTextColor(Color.parseColor("#00C853"));
+            }
+            else if("Approved".equals(app.getApproved()))
+            {
+                textView.setText(app.getApproved());
+                textView.setTextColor(Color.parseColor("#B71C1C"));
+            }
+
+            if("Admin".equals(app.getOriginator()))
+            {
+                textView3.setTextColor(Color.parseColor("#FF9E80"));
+            }
 
         } else {
             gridItemView = (View) convertView;

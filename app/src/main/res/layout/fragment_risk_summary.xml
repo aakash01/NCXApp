@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/alarm_txt"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="35dp">
+                android:layout_marginTop="75dp">
 
 
                 <LinearLayout
@@ -54,6 +54,7 @@
                         android:text=""
                         android:id="@+id/healthtxt1"
                         android:textStyle="normal"
+                        android:maxWidth="120dp"
                         android:textSize="20dp" android:layout_gravity="center" />
                 </LinearLayout>
 
@@ -82,6 +83,7 @@
                         android:id="@+id/healthtxt2"
                         android:layout_below="@+id/health2"
                         android:textStyle="normal"
+                        android:maxWidth="130dp"
                         android:textSize="20dp"  android:layout_gravity="center"/>
                 </LinearLayout>
 
@@ -110,6 +112,7 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:id="@+id/healthtxt3"
+                        android:maxWidth="110dp"
                         android:textStyle="normal"
                         android:textSize="20dp" android:layout_gravity="center" />
                 </LinearLayout>
@@ -148,6 +151,7 @@
                         android:text=""
                         android:id="@+id/healthtxt4"
                         android:textStyle="normal"
+                        android:maxWidth="120dp"
                         android:textSize="20dp"  android:layout_gravity="center"/>
                 </LinearLayout>
 
@@ -171,11 +175,12 @@
                         android:textAlignment="center"
                         android:gravity="center"/>
 
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:id="@+id/healthtxt5"
+                        android:maxWidth="120dp"
                         android:textStyle="normal"
                         android:textSize="20dp" android:layout_gravity="center" />
                 </LinearLayout>
@@ -225,6 +230,7 @@
                     android:text=""
                     android:id="@+id/capacitytxt1"
                     android:textStyle="normal"
+                    android:maxWidth="120dp"
                     android:textSize="20dp" android:layout_gravity="center" />
             </LinearLayout>
 
@@ -256,6 +262,7 @@
                         android:id="@+id/capacitytxt2"
                         android:layout_below="@+id/util2"
                         android:textStyle="normal"
+                        android:maxWidth="120dp"
                         android:textSize="20dp"  android:layout_gravity="center"/>
                 </LinearLayout>
                 <LinearLayout
@@ -283,6 +290,7 @@
                         android:text=""
                         android:id="@+id/capacitytxt3"
                         android:textStyle="normal"
+                        android:maxWidth="120dp"
                         android:textSize="20dp" android:layout_gravity="center" />
                 </LinearLayout>
             </LinearLayout>
@@ -319,6 +327,7 @@
                         android:text=""
                         android:id="@+id/capacitytxt4"
                         android:textStyle="normal"
+                        android:maxWidth="120dp"
                         android:textSize="20dp"  android:layout_gravity="center"/>
                 </LinearLayout>
 
@@ -348,6 +357,7 @@
                         android:text=""
                         android:id="@+id/capacitytxt5"
                         android:textStyle="normal"
+                        android:maxWidth="120dp"
                         android:textSize="20dp" android:layout_gravity="center" />
                 </LinearLayout>
             </LinearLayout>
@@ -401,6 +411,7 @@
                     android:text=""
                     android:id="@+id/worktxt1"
                     android:textStyle="normal"
+                    android:maxWidth="120dp"
                     android:textSize="20dp" android:layout_gravity="center" />
             </LinearLayout>
 
@@ -432,6 +443,7 @@
                     android:id="@+id/worktxt2"
                     android:layout_below="@+id/work2"
                     android:textStyle="normal"
+                    android:maxWidth="120dp"
                     android:textSize="20dp"  android:layout_gravity="center"/>
             </LinearLayout>
             <LinearLayout
@@ -459,6 +471,7 @@
                     android:text=""
                     android:id="@+id/worktxt3"
                     android:textStyle="normal"
+                    android:maxWidth="120dp"
                     android:textSize="20dp" android:layout_gravity="center" />
             </LinearLayout>
         </LinearLayout>
@@ -495,6 +508,7 @@
                     android:text=""
                     android:id="@+id/worktxt4"
                     android:textStyle="normal"
+                    android:maxWidth="120dp"
                     android:textSize="20dp"  android:layout_gravity="center"/>
             </LinearLayout>
 
@@ -524,6 +538,7 @@
                     android:text=""
                     android:id="@+id/worktxt5"
                     android:textStyle="normal"
+                    android:maxWidth="120dp"
                     android:textSize="20dp" android:layout_gravity="center" />
             </LinearLayout>
         </LinearLayout>

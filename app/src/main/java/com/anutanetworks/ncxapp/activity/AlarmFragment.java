@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.AlarmGridAdapter;
@@ -23,14 +25,18 @@ import com.anutanetworks.ncxapp.model.Alarm;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +87,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
+
                 Log.d("something", "someting");
             }
 
@@ -110,12 +117,60 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 final int checkedCount = mListView.getCheckedItemCount();
-                mAdapter.toggleSelection(position);;
+                mAdapter.toggleSelection(position);
+                ;
             }
 
             @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                return false;
+            public boolean onActionItemClicked(ActionMode mode, final MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.delete:
+                       SparseBooleanArray selected = mAdapter
+                                .getSelectedIds();
+
+                         JSONArray data = new JSONArray();
+                        StringEntity entity = null;
+                        for (int i = (selected.size() - 1); i >= 0; i--) {
+                            try {
+                                Alarm   selecteditem  = mAdapter.getItem(selected.keyAt(i));
+                                data.put(selecteditem.getId());
+                                entity = new StringEntity(data.toString());
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        AnutaRestClient.post(getActivity(), "/rest/alarms/action/acknowledge", entity, new AsyncHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                               mAdapter.updateItemsValue();
+                                Toast.makeText(getActivity(), "successfully approved!", Toast.LENGTH_LONG).show();
+
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                                Toast.makeText(getActivity(), " Error occcured!", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+                     /*  for (int i = (selected.size() - 1); i >= 0; i--) {
+                            if (selected.valueAt(i)) {
+                                WorldPopulation selecteditem = listviewadapter
+                                        .getItem(selected.keyAt(i));
+                                // Remove selected items following the ids
+                                listviewadapter.remove(selecteditem);
+                            }
+                        }*/
+                        // Close CAB
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
             }
 
             @Override
@@ -154,10 +209,9 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Alarm item = (Alarm) mAdapter.getItem(position);
-        String aid = item.getId();
-        Intent i = new Intent(view.getContext(), AlarmActivity.class);
-        i.putExtra("id", aid);
+            Alarm alarmObj = (Alarm)mAdapter.getItem(position);
+            Intent i = new Intent(view.getContext(),AlarmActivity.class);
+          i.putExtra("alarmObject",(Serializable) alarmObj);
 
         startActivity(i);
     }

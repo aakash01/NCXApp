@@ -2,19 +2,12 @@
 
 
 
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="5dp">
-    <android.support.v7.widget.Toolbar
-        xmlns:local="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        local:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    android:layout_height="fill_parent">
+
+
 
 <RelativeLayout
     android:layout_width="wrap_content"
@@ -22,6 +15,10 @@
     android:id="@+id/relativeLayout"
     android:padding="5dp"
     android:clickable="false">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,12 +46,6 @@
         android:textSize="18dp"
         android:textColor="#beff2917" />
 
-    <!--<LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/linearLayout"></LinearLayout>
--->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,43 +71,43 @@
         android:layout_alignParentStart="true"
         android:textStyle="normal" />
 
+
     <Button
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reject"
         android:id="@+id/reject"
-        android:background="#ff1fff48"
+        android:background="#FF3D00"
         android:textStyle="bold"
-        android:layout_alignTop="@+id/back"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="28dp"
-        android:layout_marginEnd="28dp" />
+        android:textColor="#FFFFFCF9"
+        android:layout_alignTop="@+id/toolbar"
+        android:layout_toLeftOf="@+id/acceptbtn"
+        android:layout_toStartOf="@+id/acceptbtn" />
 
     <Button
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accept"
+        android:text="Approval"
         android:id="@+id/acceptbtn"
-        android:background="#ffff4b3f"
-        android:layout_alignBottom="@+id/reject"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold" />
+        android:background="#FF3D00"
+        android:layout_alignParentRight="true"
+        android:textStyle="bold"
+        android:textColor="#FFFFFCF9"/>
+
 
     <Button
+        style="?android:attr/buttonStyleSmall"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
         android:id="@+id/back"
+        android:background="@drawable/ic_action_back"
+        android:layout_alignParentLeft="true"
 
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2"
-        android:textStyle="bold"
         android:onClick="onBackPressed" />
+
+
 
 </RelativeLayout>
 

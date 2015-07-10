@@ -42,7 +42,7 @@ public class AlarmGridAdapter extends ArrayAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Alarm getItem(int position) {
         return alarms.get(position);
     }
 
@@ -81,9 +81,19 @@ public class AlarmGridAdapter extends ArrayAdapter {
         } else if ("CLEARED".equals(alarmRecord.getAlarmState())) {
             alarmState.setTextColor(Color.parseColor("#00C853"));
         }
-        /*if (alarmRecord.isAcknowledged()) {
-            gridItemView.setBackgroundResource(R.color.transp);
-        }*/
+
+            TextView ack = (TextView)  gridItemView.findViewById(R.id.acknw);
+            if("false".equals(String.valueOf(alarmRecord.isAcknowledged())))
+            {
+                ack.setText("UnAck");
+                ack.setTextColor(Color.parseColor("#00C853"));
+            }
+            else if("true".equals(String.valueOf(alarmRecord.isAcknowledged())))
+            {
+                ack.setText("Ack");
+                ack.setTextColor(Color.parseColor("#B71C1C"));
+            }
+
 
         ImageView severityIcon = (ImageView) gridItemView.findViewById(R.id.severityIcon);
         switch (alarmRecord.getSeverity()) {
@@ -133,6 +143,11 @@ public class AlarmGridAdapter extends ArrayAdapter {
         else
             mSelectedItemsIds.delete(position);
         notifyDataSetChanged();
+    }
+
+    public void updateItemsValue()
+    {
+
     }
 
     public int getSelectedCount() {
