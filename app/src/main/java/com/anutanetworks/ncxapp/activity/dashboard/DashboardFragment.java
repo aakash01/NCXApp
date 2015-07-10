@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.anutanetworks.ncxapp.R;
 
 public class DashboardFragment extends Fragment {
@@ -39,28 +40,29 @@ public class DashboardFragment extends Fragment {
         @Override
         public Fragment getItem(int pos) {
             switch (pos) {
-            case 0:
-                return new DashboardServicesSummaryFragment();
-            case 1:
-                return new DashboardSystemSummaryFragment();
-            case 2:
-                return new DashboardRiskActivityFragment();
-            case 3:
-                return new DashboardDeviceSummaryFragment();
+                case 0:
+                    return new DashboardServicesSummaryFragment();
+                case 1:
+                    return new DashboardSystemSummaryFragment();
+                case 2:
+                    return new DashboardRiskActivityFragment();
+                case 3:
+                    return new DashboardDeviceSummaryFragment();
             }
             return null;
         }
 
-        @Override public CharSequence getPageTitle(int position) {
+        @Override
+        public CharSequence getPageTitle(int position) {
             switch (position) {
-            case 0:
-                return "Services - Top 5 in Utilization";
-            case 1:
-                return "System and Alarm Summary";
-            case 2:
-                return "At Risk Pods";
-            case 3:
-                return "Device summary by vendor";
+                case 0:
+                    return "Services - Top 5 in Utilization";
+                case 1:
+                    return "System and Alarm Summary";
+                case 2:
+                    return "At Risk Pods";
+                case 3:
+                    return "Device summary by vendor";
             }
             return "";
         }

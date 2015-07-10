@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.AlarmGridAdapter;
 import com.anutanetworks.ncxapp.model.Alarm;
@@ -19,66 +24,38 @@ import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AlarmFragment extends Fragment implements AbsListView.OnItemClickListener {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class AlarmFragment extends Fragment implements AbsListView.OnItemClickListener, AbsListView.OnItemLongClickListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
-    /**
-     * The fragment's ListView/GridView.
-     */
     private AbsListView mListView;
 
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
     private AlarmGridAdapter mAdapter;
+
+    public AlarmFragment() {
+    }
 
     // TODO: Rename and change types of parameters
     public static AlarmFragment newInstance(String param1, String param2) {
         AlarmFragment fragment = new AlarmFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
-    }
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public AlarmFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
         // TODO: Change Adapter to display your content
 
-         mAdapter = new AlarmGridAdapter(getActivity(), new ArrayList<Alarm>());
+        mAdapter = new AlarmGridAdapter(getActivity(), new ArrayList<Alarm>());
 
         AnutaRestClient.get("/rest/alarms", null, new JsonHttpResponseHandler() {
             @Override
@@ -94,7 +71,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                         }
                     });
 
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -126,6 +103,38 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+        mListView.setOnItemLongClickListener(this);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                final int checkedCount = mListView.getCheckedItemCount();
+                mAdapter.toggleSelection(position);
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.menu_alarm_list, menu);
+                return true;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        });
 
         return view;
     }
@@ -142,29 +151,24 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
     }
 
 
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            Alarm item = (Alarm)mAdapter.getItem(position);
-            String aid=item.getId();
-            Intent i = new Intent(view.getContext(),AlarmActivity.class);
-            i.putExtra("id",aid);
+        Alarm item = (Alarm) mAdapter.getItem(position);
+        String aid = item.getId();
+        Intent i = new Intent(view.getContext(), AlarmActivity.class);
+        i.putExtra("id", aid);
 
-            startActivity(i);
+        startActivity(i);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        view.setSelected(true);
+        return true;
+    }
 
 
-        }
-
-
-
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
 
@@ -173,7 +177,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         }
     }
 
-    class AlarmList{
+    class AlarmList {
         private List<Alarm> alarms;
 
         public List<Alarm> getAlarms() {

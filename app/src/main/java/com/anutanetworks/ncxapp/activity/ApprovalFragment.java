@@ -12,6 +12,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
 import com.anutanetworks.ncxapp.model.Approval;
@@ -19,22 +20,23 @@ import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ApprovalFragment extends Fragment implements AbsListView.OnItemClickListener {
 
 
-    ProgressDialog progressDialog;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    ProgressDialog progressDialog;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -51,6 +53,13 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
      */
     private ApprovalGridAdapter mAdapter;
 
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
+    public ApprovalFragment() {
+    }
+
     // TODO: Rename and change types of parameters
     public static ApprovalFragment newInstance(String param1, String param2) {
         ApprovalFragment fragment = new ApprovalFragment();
@@ -61,24 +70,16 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public ApprovalFragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-       mAdapter=new ApprovalGridAdapter(getActivity(),new ArrayList<Approval>());
+        mAdapter = new ApprovalGridAdapter(getActivity(), new ArrayList<Approval>());
         AnutaRestClient.get("/rest/workflowtasks", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -141,22 +142,19 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
     }
 
 
-
-
     @Override
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Approval item = (Approval)mAdapter.getItem(position);
-        String aid=item.getId();
-        Intent i = new Intent(view.getContext(),ApprovalActivity.class);
-        i.putExtra("id",aid);
+        Approval item = (Approval) mAdapter.getItem(position);
+        String aid = item.getId();
+        Intent i = new Intent(view.getContext(), ApprovalActivity.class);
+        i.putExtra("id", aid);
 
         startActivity(i);
 
 
     }
-
 
 
     /**
@@ -171,15 +169,18 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
             ((TextView) emptyView).setText(emptyText);
         }
     }
-class ApprovalList{
 
-    private List<Approval> approvals;
-    public List<Approval> getApprovals(){
-        return approvals;
+    class ApprovalList {
+
+        private List<Approval> approvals;
+
+        public List<Approval> getApprovals() {
+            return approvals;
+        }
+
+        public void setApprovals(List<Approval> approvals) {
+            this.approvals = approvals;
+        }
     }
-    public void setApprovals(List<Approval> approvals){
-        this.approvals=approvals;
-    }
-}
 
 }

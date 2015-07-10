@@ -5,7 +5,7 @@ package com.anutanetworks.ncxapp.services;
  */
 public class ValidationUtils {
 
-    public static boolean isNotNull(String text){
-        return text!=null && text.trim().length()>0 ? true: false;
+    public static boolean isNotNull(String text) {
+        return text != null && text.trim().length() > 0 ? true : false;
     }
 }

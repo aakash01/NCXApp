@@ -25,14 +25,13 @@ import java.util.Map;
  */
 public class LoginActivity extends Activity {
 
+    public static final String PREFS_NAME = "LoginPrefs";
     ProgressDialog progressDialog;
-
     TextView errorMsg;
     EditText hostUrlText;
     EditText usernameText;
     EditText passwordText;
     EditText organizationText;
-    public static final String PREFS_NAME = "LoginPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,24 +40,24 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
 
-        errorMsg = (TextView)findViewById(R.id.login_error);
-        hostUrlText = (EditText)findViewById(R.id.login_hosturl);
-        usernameText = (EditText)findViewById(R.id.login_username);
-        passwordText = (EditText)findViewById(R.id.login_password);
-        organizationText = (EditText)findViewById(R.id.login_organization);
+        errorMsg = (TextView) findViewById(R.id.login_error);
+        hostUrlText = (EditText) findViewById(R.id.login_hosturl);
+        usernameText = (EditText) findViewById(R.id.login_username);
+        passwordText = (EditText) findViewById(R.id.login_password);
+        organizationText = (EditText) findViewById(R.id.login_organization);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Authenticating babua...");
         progressDialog.setCancelable(false);
     }
 
-    public void loginUser(View view){
+    public void loginUser(View view) {
         String host_url = hostUrlText.getText().toString();
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
         String organization = organizationText.getText().toString();
-        Map<String,String> paramMap = new HashMap();
-        if(ValidationUtils.isNotNull(host_url)) {
-            paramMap.put("host_url",host_url);
+        Map<String, String> paramMap = new HashMap();
+        if (ValidationUtils.isNotNull(host_url)) {
+            paramMap.put("host_url", host_url);
             if (ValidationUtils.isNotNull(username) && ValidationUtils.isNotNull(password)) {
                 paramMap.put("username", username);
                 paramMap.put("password", password);
@@ -67,12 +66,12 @@ public class LoginActivity extends Activity {
             } else {
                 Toast.makeText(getApplicationContext(), "Please fill username and password", Toast.LENGTH_LONG).show();
             }
-        }else{
+        } else {
             Toast.makeText(getApplicationContext(), "Please specify ncx host url.", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void validateLogin(final Map<String, String> paramMap){
+    public void validateLogin(final Map<String, String> paramMap) {
         progressDialog.show();
         AnutaRestClient.initializeClient(paramMap);
 
@@ -87,30 +86,28 @@ public class LoginActivity extends Activity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 progressDialog.hide();
-                if(statusCode == 401){
+                if (statusCode == 401) {
                     errorMsg.setText("Invalid username / password");
                     Toast.makeText(getApplicationContext(), "Authentication Failure", Toast.LENGTH_LONG).show();
-                }
-                else if(statusCode == 500){
+                } else if (statusCode == 500) {
                     Toast.makeText(getApplicationContext(), "Something went wrong at server", Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Unexpected Error occcured!", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    public void navigatetoMainActivity(Map<String,String> paramMap){
+    public void navigatetoMainActivity(Map<String, String> paramMap) {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
-        for(String key : paramMap.keySet()){
-            editor.putString(key,paramMap.get(key));
+        for (String key : paramMap.keySet()) {
+            editor.putString(key, paramMap.get(key));
         }
         editor.putString("logged", "logged");
         editor.commit();
 
-        Intent mainIntent = new Intent(getApplicationContext(),MainActivity.class);
+        Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent);
     }

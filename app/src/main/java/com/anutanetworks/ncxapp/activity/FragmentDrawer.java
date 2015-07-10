@@ -13,30 +13,27 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.NavigationDrawerAdapter;
 import com.anutanetworks.ncxapp.model.NavDrawerItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentDrawer extends Fragment {
     private static String TAG = FragmentDrawer.class.getSimpleName();
-
+    private static String[] titles = null;
+    private static String[] icons = null;
     private RecyclerView recyclerView;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
-    private static String[] titles = null;
-    private static String[] icons = null;
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {
 
-    }
-
-    public void setDrawerListener(FragmentDrawerListener listener) {
-        this.drawerListener = listener;
     }
 
     public static List<NavDrawerItem> getData() {
@@ -51,6 +48,10 @@ public class FragmentDrawer extends Fragment {
             data.add(navItem);
         }
         return data;
+    }
+
+    public void setDrawerListener(FragmentDrawerListener listener) {
+        this.drawerListener = listener;
     }
 
     @Override
@@ -129,6 +130,10 @@ public class FragmentDrawer extends Fragment {
         public void onLongClick(View view, int position);
     }
 
+    public interface FragmentDrawerListener {
+        public void onDrawerItemSelected(View view, int position);
+    }
+
     static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
@@ -165,9 +170,5 @@ public class FragmentDrawer extends Fragment {
         @Override
         public void onTouchEvent(RecyclerView rv, MotionEvent e) {
         }
-    }
-
-    public interface FragmentDrawerListener {
-        public void onDrawerItemSelected(View view, int position);
     }
 }

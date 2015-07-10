@@ -34,6 +34,10 @@ public class Approval {
         return processName;
     }
 
+    public void setProcessName(String processName) {
+        this.processName = processName;
+    }
+
     public List<TaskApprover> getTaskApprovers() {
         return taskApprovers;
     }
@@ -41,16 +45,13 @@ public class Approval {
     public void setTaskApprovers(List<TaskApprover> taskApprovers) {
         this.taskApprovers = taskApprovers;
     }
+
     public List<SubUserTask> getSubTasks() {
         return subTasks;
     }
 
     public void setSubTasks(List<SubUserTask> subTasks) {
         this.subTasks = subTasks;
-    }
-
-    public void setProcessName(String processName) {
-        this.processName = processName;
     }
 
     public String getTaskName() {

@@ -5,58 +5,58 @@ package com.anutanetworks.ncxapp.model;
  */
 public class TasksSummary {
 
-   private int tenants;
-   private int vdcs;
-   private int vms;
-   private int tasksRunning;
-   private int tasksWaiting;
-   private int tasksError;
+    private int tenants;
+    private int vdcs;
+    private int vms;
+    private int tasksRunning;
+    private int tasksWaiting;
+    private int tasksError;
 
-   public int getTenants() {
-      return tenants;
-   }
+    public int getTenants() {
+        return tenants;
+    }
 
-   public void setTenants(int tenants) {
-      this.tenants = tenants;
-   }
+    public void setTenants(int tenants) {
+        this.tenants = tenants;
+    }
 
-   public int getVdcs() {
-      return vdcs;
-   }
+    public int getVdcs() {
+        return vdcs;
+    }
 
-   public void setVdcs(int vdcs) {
-      this.vdcs = vdcs;
-   }
+    public void setVdcs(int vdcs) {
+        this.vdcs = vdcs;
+    }
 
-   public int getVms() {
-      return vms;
-   }
+    public int getVms() {
+        return vms;
+    }
 
-   public void setVms(int vms) {
-      this.vms = vms;
-   }
+    public void setVms(int vms) {
+        this.vms = vms;
+    }
 
-   public int getTasksRunning() {
-      return tasksRunning;
-   }
+    public int getTasksRunning() {
+        return tasksRunning;
+    }
 
-   public void setTasksRunning(int tasksRunning) {
-      this.tasksRunning = tasksRunning;
-   }
+    public void setTasksRunning(int tasksRunning) {
+        this.tasksRunning = tasksRunning;
+    }
 
-   public int getTasksWaiting() {
-      return tasksWaiting;
-   }
+    public int getTasksWaiting() {
+        return tasksWaiting;
+    }
 
-   public void setTasksWaiting(int tasksWaiting) {
-      this.tasksWaiting = tasksWaiting;
-   }
+    public void setTasksWaiting(int tasksWaiting) {
+        this.tasksWaiting = tasksWaiting;
+    }
 
-   public int getTasksError() {
-      return tasksError;
-   }
+    public int getTasksError() {
+        return tasksError;
+    }
 
-   public void setTasksError(int tasksError) {
-      this.tasksError = tasksError;
-   }
+    public void setTasksError(int tasksError) {
+        this.tasksError = tasksError;
+    }
 }

@@ -16,28 +16,28 @@ import java.util.List;
 /**
  * Created by Aakash on 7/5/2015.
  */
-public class ApprovalGridAdapter extends ArrayAdapter{
+public class ApprovalGridAdapter extends ArrayAdapter {
 
     private Context context;
-    private List<Approval> approvals=new ArrayList<>();
+    private List<Approval> approvals = new ArrayList<>();
     private LayoutInflater inflater;
 
 
-    public ApprovalGridAdapter(Context context,ArrayList<Approval> approvals)
-    {
-        super(context,android.R.layout.simple_list_item_1,approvals);
+    public ApprovalGridAdapter(Context context, ArrayList<Approval> approvals) {
+        super(context, android.R.layout.simple_list_item_1, approvals);
         this.context = context;
         this.approvals = approvals;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
     @Override
-    public int getCount(){
+    public int getCount() {
         return approvals.size();
     }
+
     @Override
-    public Object getItem(int position)
-    {
+    public Object getItem(int position) {
         return approvals.get(position);
     }
 
@@ -55,15 +55,15 @@ public class ApprovalGridAdapter extends ArrayAdapter{
         if (convertView == null) {
             gridItemView = new View(context);
             gridItemView = inflater.inflate(R.layout.fragment_approval_grid_item, null);
-             Approval app=approvals.get(position);
+            Approval app = approvals.get(position);
             TextView textView = (TextView) gridItemView
                     .findViewById(R.id.actions);
             textView.setText(app.getApproved());
             TextView textView2 = (TextView) gridItemView
                     .findViewById(R.id.description);
             textView2.setText(app.getDescription());
-            TextView textView3=(TextView) gridItemView
-                                 .findViewById(R.id.originator);
+            TextView textView3 = (TextView) gridItemView
+                    .findViewById(R.id.originator);
             textView3.setText(app.getOriginator());
 
         } else {
