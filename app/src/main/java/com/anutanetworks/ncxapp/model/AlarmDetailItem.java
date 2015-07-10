@@ -4,7 +4,7 @@ package com.anutanetworks.ncxapp.model;
  * Created by Aakash on 7/9/2015.
  */
 public class AlarmDetailItem {
-    String  name;
+    String name;
     String value;
 
     public AlarmDetailItem(String name, String value) {

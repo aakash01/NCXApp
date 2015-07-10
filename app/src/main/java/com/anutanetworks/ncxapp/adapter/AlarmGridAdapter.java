@@ -82,17 +82,14 @@ public class AlarmGridAdapter extends ArrayAdapter {
             alarmState.setTextColor(Color.parseColor("#00C853"));
         }
 
-            TextView ack = (TextView)  gridItemView.findViewById(R.id.acknw);
-            if("false".equals(String.valueOf(alarmRecord.isAcknowledged())))
-            {
-                ack.setText("UnAck");
-                ack.setTextColor(Color.parseColor("#00C853"));
-            }
-            else if("true".equals(String.valueOf(alarmRecord.isAcknowledged())))
-            {
-                ack.setText("Ack");
-                ack.setTextColor(Color.parseColor("#B71C1C"));
-            }
+        TextView ack = (TextView) gridItemView.findViewById(R.id.acknw);
+        if ("false".equals(String.valueOf(alarmRecord.isAcknowledged()))) {
+            ack.setText("UnAck");
+            ack.setTextColor(Color.parseColor("#00C853"));
+        } else if ("true".equals(String.valueOf(alarmRecord.isAcknowledged()))) {
+            ack.setText("Ack");
+            ack.setTextColor(Color.parseColor("#B71C1C"));
+        }
 
 
         ImageView severityIcon = (ImageView) gridItemView.findViewById(R.id.severityIcon);
@@ -113,7 +110,7 @@ public class AlarmGridAdapter extends ArrayAdapter {
                 severityIcon.setImageResource(R.drawable.ic_info_48px);
         }
         gridItemView.setBackgroundColor(Color.TRANSPARENT);
-        if(mSelectedItemsIds.get(position)){
+        if (mSelectedItemsIds.get(position)) {
             severityIcon.setImageResource(R.drawable.ic_check_circle_black_48dp);
             gridItemView.setSelected(true);
             gridItemView.setBackgroundColor(Color.LTGRAY);
@@ -145,9 +142,13 @@ public class AlarmGridAdapter extends ArrayAdapter {
         notifyDataSetChanged();
     }
 
-    public void updateItemsValue()
-    {
-
+    public void updateItemsValue(boolean isAcknowledge) {
+        for (int i = 0; i < mSelectedItemsIds.size(); i++) {
+            Alarm selecteditem = getItem(mSelectedItemsIds.keyAt(i));
+            selecteditem.setAcknowledged(isAcknowledge);
+        }
+        removeSelection();
+        notifyDataSetChanged();
     }
 
     public int getSelectedCount() {

@@ -1,22 +1,16 @@
 package com.anutanetworks.ncxapp.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anutanetworks.ncxapp.R;
-import com.anutanetworks.ncxapp.model.Alarm;
-import com.anutanetworks.ncxapp.model.AlarmDetail;
 import com.anutanetworks.ncxapp.model.AlarmDetailItem;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,15 +21,14 @@ public class AlarmDetailActivityAdapter extends ArrayAdapter {
     private List<AlarmDetailItem> items = new ArrayList<>();
 
     private LayoutInflater inflater;
+
     public AlarmDetailActivityAdapter(Context context, ArrayList<AlarmDetailItem> items) {
-        super(context,android.R.layout.simple_list_item_1,items);
+        super(context, android.R.layout.simple_list_item_1, items);
         this.context = context;
         this.items = items;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-
 
 
     @Override
@@ -52,6 +45,7 @@ public class AlarmDetailActivityAdapter extends ArrayAdapter {
     public long getItemId(int position) {
         return 0;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -70,22 +64,18 @@ public class AlarmDetailActivityAdapter extends ArrayAdapter {
         listTitle.setText(alarmdetail.getName());
         TextView description = (TextView) gridItemView
                 .findViewById(R.id.value);
-        if("false".equals(alarmdetail.getValue()))
-       {
-           description.setText("No");
+        if ("false".equals(alarmdetail.getValue())) {
+            description.setText("No");
 
-       }
-        else if("true".equals(alarmdetail.getValue()))
-       {
-           description.setText("Yes");
-       }
-        else {
-           description.setText(alarmdetail.getValue());
-       }
+        } else if ("true".equals(alarmdetail.getValue())) {
+            description.setText("Yes");
+        } else {
+            description.setText(alarmdetail.getValue());
+        }
         return gridItemView;
     }
 
- public void updateItems(List<AlarmDetailItem> items) {
+    public void updateItems(List<AlarmDetailItem> items) {
         this.addAll(items);
         notifyDataSetChanged();
     }

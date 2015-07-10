@@ -121,19 +121,24 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                 ;
             }
 
+
             @Override
             public boolean onActionItemClicked(ActionMode mode, final MenuItem item) {
-
+                final boolean checkitem;
+                String posturl;
                 switch (item.getItemId()) {
-                    case R.id.delete:
-                       SparseBooleanArray selected = mAdapter
+                    case R.id.Ack:
+                        checkitem = true;
+                        posturl = "/rest/alarms/action/acknowledge";
+                        SparseBooleanArray selected = mAdapter
                                 .getSelectedIds();
 
-                         JSONArray data = new JSONArray();
+                        JSONArray data = new JSONArray();
                         StringEntity entity = null;
                         for (int i = (selected.size() - 1); i >= 0; i--) {
                             try {
-                                Alarm   selecteditem  = mAdapter.getItem(selected.keyAt(i));
+                                Alarm selecteditem = mAdapter.getItem(selected.keyAt(i));
+
                                 data.put(selecteditem.getId());
                                 entity = new StringEntity(data.toString());
                             } catch (UnsupportedEncodingException e) {
@@ -141,11 +146,11 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                             }
                         }
 
-                        AnutaRestClient.post(getActivity(), "/rest/alarms/action/acknowledge", entity, new AsyncHttpResponseHandler() {
+                        AnutaRestClient.post(getActivity(), posturl, entity, new AsyncHttpResponseHandler() {
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
-                               mAdapter.updateItemsValue();
+                                mAdapter.updateItemsValue(checkitem);
                                 Toast.makeText(getActivity(), "successfully approved!", Toast.LENGTH_LONG).show();
 
                             }
@@ -166,7 +171,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                             }
                         }*/
                         // Close CAB
-                        mode.finish();
+                       mode.finish();
                         return true;
                     default:
                         return false;
@@ -186,8 +191,8 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // TODO Auto-generated method stub
-                return false;
+
+             return false;
             }
         });
 
@@ -209,9 +214,9 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            Alarm alarmObj = (Alarm)mAdapter.getItem(position);
-            Intent i = new Intent(view.getContext(),AlarmActivity.class);
-          i.putExtra("alarmObject",(Serializable) alarmObj);
+        Alarm alarmObj = (Alarm) mAdapter.getItem(position);
+        Intent i = new Intent(view.getContext(), AlarmActivity.class);
+        i.putExtra("alarmObject", (Serializable) alarmObj);
 
         startActivity(i);
     }

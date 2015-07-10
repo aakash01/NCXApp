@@ -1,13 +1,11 @@
 package com.anutanetworks.ncxapp.model;
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
  * Created by Aakash on 7/5/2015.
  */
-public class Alarm implements Serializable{
+public class Alarm implements Serializable {
     private String id;
     private String message;
     private String description;
