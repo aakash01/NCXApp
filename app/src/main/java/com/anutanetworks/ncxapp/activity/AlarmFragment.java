@@ -110,7 +110,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 final int checkedCount = mListView.getCheckedItemCount();
-                mAdapter.toggleSelection(position);
+                mAdapter.toggleSelection(position);;
             }
 
             @Override
