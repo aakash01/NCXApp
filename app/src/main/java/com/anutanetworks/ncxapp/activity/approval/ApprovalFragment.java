@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,19 +20,21 @@ import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.anutanetworks.ncxapp.services.EndlessScrollListener;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApprovalFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ApprovalFragment extends Fragment implements AbsListView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -43,10 +47,8 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
     private String mParam2;
 
     private AbsListView mListView;
-
-
     private ApprovalGridAdapter mAdapter;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public ApprovalFragment() {
     }
@@ -71,19 +73,22 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mAdapter = new ApprovalGridAdapter(getActivity(), new ArrayList<Approval>());
-        getApprovalData();
+        getApprovalData(0, 10);
 
     }
 
-    private void getApprovalData() {
-        AnutaRestClient.get("/rest/workflowtasks", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+    private void getApprovalData(int start, int limit) {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("start",String.valueOf(start));
+        requestParams.add("limit",String.valueOf(limit));
+        AnutaRestClient.get("/rest/workflowtasks", requestParams, new JsonHttpResponseHandler() {
+           @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
 
                     ObjectMapper objectMapper1 = new ObjectMapper();
-                    Object val1 = response.toString();
-                    final ArrayList<Approval> approvals = objectMapper1.readValue(val1.toString(), new TypeReference<List<Approval>>() {
+                    Object val = response.get("data");
+                    final ArrayList<Approval> approvals = objectMapper1.readValue(val.toString(), new TypeReference<List<Approval>>() {
                     });
                     Activity activity = getActivity();
                     if (activity != null) {
@@ -95,13 +100,18 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                }catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
+                    finally {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(getActivity(), "Unable to Load Approval Data", Toast.LENGTH_LONG).show();
             }
         });
@@ -112,10 +122,21 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_approval, container, false);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         // Set the adapter
         mListView = (AbsListView) view.findViewById(R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
+        mListView.setOnScrollListener(new EndlessScrollListener(15) {
+
+            @Override
+            public void onLoadMore(int page, int limit) {
+                int start = (page - 1) * limit;
+                Log.d("aakash", "load more data with start " + start + " and limit " + limit);
+                getApprovalData(start, limit);
+            }
+        });
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
         return view;
@@ -159,6 +180,14 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        mAdapter.clear();
+        getApprovalData(0,10);
+
     }
 
     class ApprovalList {

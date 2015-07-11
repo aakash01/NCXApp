@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -22,10 +24,12 @@ import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.AlarmGridAdapter;
 import com.anutanetworks.ncxapp.model.Alarm;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.anutanetworks.ncxapp.services.EndlessScrollListener;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
@@ -39,11 +43,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlarmFragment extends Fragment implements AbsListView.OnItemClickListener, AbsListView.OnItemLongClickListener {
+public class AlarmFragment extends Fragment implements AbsListView.OnItemClickListener, AbsListView.OnItemLongClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private AbsListView mListView;
 
     private AlarmGridAdapter mAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public AlarmFragment() {
     }
@@ -58,16 +63,18 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: Change Adapter to display your content
-
         mAdapter = new AlarmGridAdapter(getActivity(), new ArrayList<Alarm>());
 
-        getAlarmData();
+        getAlarmData(0, 15);
 
     }
 
-    private void getAlarmData() {
-        AnutaRestClient.get("/rest/alarms", null, new JsonHttpResponseHandler() {
+    private void getAlarmData(int start, int limit) {
+        RequestParams requestParams = new RequestParams();
+        requestParams.add("start",String.valueOf(start));
+        requestParams.add("limit",String.valueOf(limit));
+
+        AnutaRestClient.get("/rest/alarms", requestParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -85,12 +92,15 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }finally {
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(getActivity(), "Unable to Load Alarm Data", Toast.LENGTH_LONG).show();
             }
         });
@@ -103,6 +113,8 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(R.id.list);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
@@ -121,7 +133,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, final MenuItem item) {
-                 boolean isAck = false;
+                boolean isAck = false;
                 String posturl = null;
                 switch (item.getItemId()) {
                     case R.id.Ack:
@@ -133,7 +145,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                         posturl = "/rest/alarms/action/unacknowledge";
                         break;
                 }
-                if(null != posturl) {
+                if (null != posturl) {
                     SparseBooleanArray selected = mAdapter
                             .getSelectedIds();
                     JSONArray data = new JSONArray();
@@ -148,13 +160,13 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                             e.printStackTrace();
                         }
                     }
-                   final boolean isAcknowledge = isAck;
+                    final boolean isAcknowledge = isAck;
                     AnutaRestClient.post(getActivity(), posturl, entity, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
                             mAdapter.updateItemsValue(isAcknowledge);
-                            Toast.makeText(getActivity(), "Successfully "+(isAcknowledge?"Acknowledged":"Unacknowledged"), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Successfully " + (isAcknowledge ? "Acknowledged" : "Unacknowledged"), Toast.LENGTH_LONG).show();
 
                         }
 
@@ -166,9 +178,9 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                         }
                     });
                 }
-                    // Close CAB
-                    mode.finish();
-                    return true;
+                // Close CAB
+                mode.finish();
+                return true;
 
             }
 
@@ -194,21 +206,19 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                         .getSelectedIds();
                 boolean isAck = false;
                 boolean isUnAck = false;
-                for(int i= 0 ; i<selected.size(); i++)
-                {
+                for (int i = 0; i < selected.size(); i++) {
                     Alarm selecteditem = mAdapter.getItem(selected.keyAt(i));
 
-                    if(selecteditem.isAcknowledged()) {
+                    if (selecteditem.isAcknowledged()) {
                         isAck = true;
-                    }
-                    else {
+                    } else {
                         isUnAck = true;
                     }
                 }
-                if(isAck) {
+                if (isAck) {
                     ackMenu.setVisible(false);
                 }
-                if(isUnAck) {
+                if (isUnAck) {
                     unAckMenu.setVisible(false);
                 }
 
@@ -216,7 +226,18 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             }
         });
 
-        return view;
+        mListView.setOnScrollListener(new EndlessScrollListener(15) {
+
+            @Override
+            public void onLoadMore(int page, int limit) {
+                int start  = (page-1)*limit;
+                Log.d("aakash", "load more data with start " + start + " and limit " +limit);
+                getAlarmData(start, limit);
+            }
+        });
+
+
+            return view;
     }
 
     @Override
@@ -254,6 +275,14 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         if (emptyView instanceof TextView) {
             ((TextView) emptyView).setText(emptyText);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        mAdapter.clear();
+        getAlarmData(0,15);
+
     }
 
     class AlarmList {
