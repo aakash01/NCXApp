@@ -1,24 +1,20 @@
 package com.anutanetworks.ncxapp.activity.approval;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.model.SubUserTask;
@@ -111,44 +107,41 @@ public class ApprovalActivity extends AppCompatActivity  {
         {
             case R.id.approved:
                 posturl =  "/rest/workflowtasks/" + id + "/action/approve";
-                Dialog approval = new Dialog(this);
-                approval.setContentView(R.layout.prompt);
-                approval.setTitle("Approve");
-                Button canclebtn = (Button) approval.findViewById(R.id.cancel);
-                EditText txtmsg = (EditText) approval.findViewById(R.id.msg);
-                Button ok = (Button) approval.findViewById(R.id.okbtn);
 
-                changeApprovedStatus(approval, canclebtn, txtmsg, ok);
-                approval.show();
+                new MaterialDialog.Builder(this)
+                        .title("Approve")
+                        .content("Note")
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input(null,null, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                approveOrReject(input.toString());
+                            }
+                        }).negativeText("Cancel").show();
                 break;
-
             case R.id.reject:
                 posturl = "/rest/workflowtasks/" + id + "/action/reject";
-                approval = new Dialog(this);
-                approval.setContentView(R.layout.prompt);
-                approval.setTitle("Reject");
-                canclebtn = (Button) approval.findViewById(R.id.cancel);
-                txtmsg = (EditText) approval.findViewById(R.id.msg);
-                ok = (Button) approval.findViewById(R.id.okbtn);
-                changeApprovedStatus(approval, canclebtn, txtmsg, ok);
-               approval.show();
+                new MaterialDialog.Builder(this)
+                        .title("Reject")
+                        .content("Note")
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .input(null,null, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                approveOrReject(input.toString());
+                            }
+                        }).negativeText("Cancel").show();
                 break;
         }
-
 
         return super.onOptionsItemSelected(approveMenu);
     }
 
-    private void changeApprovedStatus(final Dialog approval, Button canclebtn, final EditText txtmsg, Button ok) {
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String msgs = txtmsg.getText().toString();
+    private void approveOrReject(String notes) {
                 JSONObject jsonParams = new JSONObject();
                 StringEntity entity = null;
                 try {
-                    jsonParams.put("notes", msgs);
+                    jsonParams.put("notes", notes);
                     jsonParams.put("scheduleNow", true);
                     jsonParams.put("reScheduleTask", true);
                     entity = new StringEntity(jsonParams.toString());
@@ -162,7 +155,6 @@ public class ApprovalActivity extends AppCompatActivity  {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Toast.makeText(getApplicationContext(), "successfully done!", Toast.LENGTH_LONG).show();
-                        approval.dismiss();
 
                     }
 
@@ -174,15 +166,6 @@ public class ApprovalActivity extends AppCompatActivity  {
                     }
                 });
 
-            }
-        });
-
-        canclebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                approval.dismiss();
-            }
-        });
     }
 
 

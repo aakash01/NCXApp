@@ -2,11 +2,13 @@ package com.anutanetworks.ncxapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by Aakash on 7/6/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TaskApprover {
+public class TaskApprover implements Serializable{
     private String id;
     private String approvalStatus;
     private String notes;
