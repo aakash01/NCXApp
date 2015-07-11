@@ -17,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
-import com.anutanetworks.ncxapp.activity.alarm.AlarmActivity;
 import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
-import com.anutanetworks.ncxapp.model.Alarm;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.anutanetworks.ncxapp.services.EndlessScrollListener;
@@ -105,8 +103,7 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
                     e.printStackTrace();
                 }catch (JSONException e) {
                     e.printStackTrace();
-                }
-                    finally {
+                } finally {
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }

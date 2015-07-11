@@ -44,20 +44,13 @@ public class DashboardRiskSummaryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_risk_summary, container, false);
-
-
-
-
         getRiskHealthData();
         getRiskCapacityData();
         getRiskWorkloadData();
 
         return view;
     }
-
-
 
     private void getRiskHealthData() {
         AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_HEALTH&count=5", null,

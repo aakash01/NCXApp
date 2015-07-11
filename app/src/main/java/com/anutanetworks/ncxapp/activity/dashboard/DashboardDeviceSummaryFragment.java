@@ -49,22 +49,16 @@ public class DashboardDeviceSummaryFragment extends Fragment {
         mChart.setUsePercentValues(true);
         mChart.setDescription("Device Summary By Vendor");
         mChart.setDragDecelerationFrictionCoef(0.95f);
-
         mChart.setDrawHoleEnabled(true);
         mChart.setHoleColorTransparent(true);
         mChart.setTransparentCircleColor(Color.WHITE);
-
         mChart.setHoleRadius(58f);
         mChart.setTransparentCircleRadius(61f);
-
         mChart.setDrawCenterText(true);
         mChart.setDrawSliceText(false);
-
         mChart.setRotationAngle(0);
         mChart.setRotationEnabled(true);
-
         mChart.setNoDataText("No Data Available");
-
         mChart.animateY(1500, Easing.EasingOption.EaseInOutQuad);
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override

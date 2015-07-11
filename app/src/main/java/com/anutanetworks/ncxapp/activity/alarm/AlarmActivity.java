@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AbsListView;
@@ -43,7 +44,7 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_detail_list_);
+        setContentView(R.layout.activity_alarm_detail_list);
         alarmAdapter = new AlarmDetailActivityAdapter(getApplicationContext(), new ArrayList<AlarmDetailItem>());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -96,8 +97,10 @@ public class AlarmActivity extends AppCompatActivity {
         String posturl = null;
         boolean isAck = false;
 
-        switch(item.getItemId())
-        {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.Ack:
                 posturl = "/rest/alarms/action/acknowledge";
                 isAck = true;
@@ -129,7 +132,7 @@ public class AlarmActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Log.d("internal-error",error.getLocalizedMessage());
                 Toast.makeText(getApplicationContext(), " Error occcured!", Toast.LENGTH_LONG).show();
 
             }

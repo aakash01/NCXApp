@@ -35,4 +35,6 @@
     <string name="username">User Name</string>
     <string name="password">Password</string>
     <string name="organization">Organization</string>
+    <string name="progress_dialog">Loading Data</string>
+    <string name="please_wait">Please Wait</string>
 </resources>

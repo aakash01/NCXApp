@@ -61,7 +61,7 @@ public class ApprovalDetailActivityAdapter extends ArrayAdapter {
         View gridItemView;
         if(convertView == null) {
             gridItemView = new View(context);
-            gridItemView = inflater.inflate(R.layout.activity_approval_detail_list_item_, null);
+            gridItemView = inflater.inflate(R.layout.activity_approval_detail_list_item, null);
         }else{
             gridItemView = (View)convertView;
         }

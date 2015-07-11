@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -55,7 +54,7 @@ public class DashboardSystemSummaryFragment extends Fragment {
                     ObjectMapper objectMapper = new ObjectMapper();
                     final AlarmsSummary alarmsSummary = objectMapper.readValue(response.toString(), AlarmsSummary.class);
                     Activity activity = getActivity();
-                    if(activity != null) {
+                    if (activity != null) {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -63,7 +62,7 @@ public class DashboardSystemSummaryFragment extends Fragment {
                             }
                         });
                     }
-               } catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }

@@ -172,7 +172,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                            Log.d("internal-error",error.getLocalizedMessage());
                             Toast.makeText(getActivity(), " Error occcured!", Toast.LENGTH_LONG).show();
 
                         }
@@ -194,6 +194,8 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 // TODO Auto-generated method stub
+                mAdapter.removeSelection();
+                mListView.clearChoices();
             }
 
             @Override
@@ -230,6 +232,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
             @Override
             public void onLoadMore(int page, int limit) {
+                swipeRefreshLayout.setRefreshing(true);
                 int start  = (page-1)*limit;
                 Log.d("aakash", "load more data with start " + start + " and limit " +limit);
                 getAlarmData(start, limit);

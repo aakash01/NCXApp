@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AbsListView;
@@ -51,7 +52,7 @@ public class ApprovalActivity extends AppCompatActivity  {
         approvalObj = (Approval) i.getSerializableExtra("approvalObject");
 
         id = approvalObj.getId();
-        setContentView(R.layout.activity_approval_detail_list_);
+        setContentView(R.layout.activity_approval_detail_list);
         commandsAdapter = new ApprovalDetailActivityAdapter(getApplicationContext(), new ArrayList<ApprovalDetailItem>());
         mListView = (AbsListView) findViewById(R.id.commandList);
         ((AdapterView<ListAdapter>) mListView).setAdapter(commandsAdapter);
@@ -113,10 +114,11 @@ public class ApprovalActivity extends AppCompatActivity  {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem approveMenu) {
-       int menuid = approveMenu.getItemId();
+        switch (approveMenu.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
 
-        switch (approveMenu.getItemId())
-        {
             case R.id.approved:
                 posturl =  "/rest/workflowtasks/" + id + "/action/approve";
 
@@ -172,7 +174,7 @@ public class ApprovalActivity extends AppCompatActivity  {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                        Log.d("internal-error",error.getLocalizedMessage());
                         Toast.makeText(getApplicationContext(), " Error occcured!", Toast.LENGTH_LONG).show();
 
                     }

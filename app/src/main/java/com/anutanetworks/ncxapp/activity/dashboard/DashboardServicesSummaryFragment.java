@@ -51,7 +51,6 @@ public class DashboardServicesSummaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_service_summary, container, false);
         mChart = (BarChart) view.findViewById(R.id.serviceSummaryChart);
-
         mChart.setDescription("");
         getSummaryData();
         return view;
@@ -61,10 +60,6 @@ public class DashboardServicesSummaryFragment extends Fragment {
     {
         AnutaRestClient.get("/rest/capacities/filter/top?componentType=SERVICE&capacityType&count=0", null,
                 new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    }
-
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                         try {
