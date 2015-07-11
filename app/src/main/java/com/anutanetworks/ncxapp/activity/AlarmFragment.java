@@ -100,7 +100,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alarm, container, false);
 
@@ -113,70 +113,69 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         mListView.setOnItemLongClickListener(this);
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 final int checkedCount = mListView.getCheckedItemCount();
                 mAdapter.toggleSelection(position);
-                ;
-            }
 
+
+                mode.invalidate();
+            }
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, final MenuItem item) {
-                final boolean checkitem;
-                String posturl;
+                 boolean isAck = false;
+                String posturl = null;
                 switch (item.getItemId()) {
                     case R.id.Ack:
-                        checkitem = true;
+                        isAck = true;
                         posturl = "/rest/alarms/action/acknowledge";
-                        SparseBooleanArray selected = mAdapter
-                                .getSelectedIds();
+                        break;
+                    case R.id.unAck:
+                        isAck = false;
+                        posturl = "/rest/alarms/action/unacknowledge";
+                        break;
+                }
+                if(null != posturl) {
+                    SparseBooleanArray selected = mAdapter
+                            .getSelectedIds();
+                    JSONArray data = new JSONArray();
+                    StringEntity entity = null;
+                    for (int i = (selected.size() - 1); i >= 0; i--) {
+                        try {
+                            Alarm selecteditem = mAdapter.getItem(selected.keyAt(i));
 
-                        JSONArray data = new JSONArray();
-                        StringEntity entity = null;
-                        for (int i = (selected.size() - 1); i >= 0; i--) {
-                            try {
-                                Alarm selecteditem = mAdapter.getItem(selected.keyAt(i));
+                            data.put(selecteditem.getId());
+                            entity = new StringEntity(data.toString());
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                                data.put(selecteditem.getId());
-                                entity = new StringEntity(data.toString());
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
+                    final boolean isAcknowledge = isAck;
+                    AnutaRestClient.post(getActivity(), posturl, entity, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                            mAdapter.updateItemsValue(isAcknowledge);
+                            Toast.makeText(getActivity(), "Successfully "+(isAcknowledge?"Acknowledged":"Unacknowledged"), Toast.LENGTH_LONG).show();
+
                         }
 
-                        AnutaRestClient.post(getActivity(), posturl, entity, new AsyncHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-                                mAdapter.updateItemsValue(checkitem);
-                                Toast.makeText(getActivity(), "successfully approved!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), " Error occcured!", Toast.LENGTH_LONG).show();
 
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                                Toast.makeText(getActivity(), " Error occcured!", Toast.LENGTH_LONG).show();
-
-                            }
-                        });
-                     /*  for (int i = (selected.size() - 1); i >= 0; i--) {
-                            if (selected.valueAt(i)) {
-                                WorldPopulation selecteditem = listviewadapter
-                                        .getItem(selected.keyAt(i));
-                                // Remove selected items following the ids
-                                listviewadapter.remove(selecteditem);
-                            }
-                        }*/
-                        // Close CAB
-                       mode.finish();
-                        return true;
-                    default:
-                        return false;
+                        }
+                    });
                 }
+                    // Close CAB
+                    mode.finish();
+                    return true;
+
             }
+
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -191,8 +190,33 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                MenuItem ackMenu = menu.findItem(R.id.Ack);
+                ackMenu.setVisible(true);
+                MenuItem unAckMenu = menu.findItem(R.id.unAck);
+                unAckMenu.setVisible(true);
+                SparseBooleanArray selected = mAdapter
+                        .getSelectedIds();
+                boolean isAck = false;
+                boolean isUnAck = false;
+                for(int i= 0 ; i<selected.size(); i++)
+                {
+                    Alarm selecteditem = mAdapter.getItem(selected.keyAt(i));
 
-             return false;
+                    if(selecteditem.isAcknowledged()) {
+                        isAck = true;
+                    }
+                    else {
+                        isUnAck = true;
+                    }
+                }
+                if(isAck) {
+                    ackMenu.setVisible(false);
+                }
+                if(isUnAck) {
+                    unAckMenu.setVisible(false);
+                }
+
+                return true;
             }
         });
 

@@ -69,10 +69,10 @@ public class ApprovalGridAdapter extends ArrayAdapter {
 
             if ("Rejected".equals(app.getApproved())) {
                 textView.setText(app.getApproved());
-                textView.setTextColor(Color.parseColor("#00C853"));
+                textView.setTextColor(Color.parseColor("#B71C1C"));
             } else if ("Approved".equals(app.getApproved())) {
                 textView.setText(app.getApproved());
-                textView.setTextColor(Color.parseColor("#B71C1C"));
+                textView.setTextColor(Color.parseColor("#00C853"));
             }
 
             if ("Admin".equals(app.getOriginator())) {

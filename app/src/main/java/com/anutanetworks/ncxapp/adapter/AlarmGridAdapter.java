@@ -85,10 +85,10 @@ public class AlarmGridAdapter extends ArrayAdapter {
         TextView ack = (TextView) gridItemView.findViewById(R.id.acknw);
         if ("false".equals(String.valueOf(alarmRecord.isAcknowledged()))) {
             ack.setText("UnAck");
-            ack.setTextColor(Color.parseColor("#00C853"));
+            ack.setTextColor(Color.parseColor("#B71C1C"));
         } else if ("true".equals(String.valueOf(alarmRecord.isAcknowledged()))) {
             ack.setText("Ack");
-            ack.setTextColor(Color.parseColor("#B71C1C"));
+            ack.setTextColor(Color.parseColor("#00C853"));
         }
 
 
