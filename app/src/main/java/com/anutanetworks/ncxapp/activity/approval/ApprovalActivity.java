@@ -90,19 +90,22 @@ public class ApprovalActivity extends AppCompatActivity  {
             }
         });
     }
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_approval, container, false);
-        return view;
-    }
-
-    @Override
+      @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        boolean approve = false;
+        if("Approved".equals(approvalObj.getApproved()) || "Rejected".equals(approvalObj.getApproved())) {
+            approve = true;
+        }
         getMenuInflater().inflate(R.menu.menu_approval_detail, menu);
-        return true;
+        if(approve) {
+            for(int i=0; i<menu.size(); i++)
+                menu.getItem(i).setVisible(false);
+        }
+        return super.onCreateOptionsMenu(menu);
     }
     String posturl = null;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem approveMenu) {
        int menuid = approveMenu.getItemId();
