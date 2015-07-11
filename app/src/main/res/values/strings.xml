@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NCX App</string>
+    <string name="app_name">NCX</string>
 
     <string name="action_settings">Settings</string>
     <string name="drawer_open">Open</string>
