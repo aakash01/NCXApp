@@ -64,12 +64,9 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         super.onCreate(savedInstanceState);
 
         mAdapter = new AlarmGridAdapter(getActivity(), new ArrayList<Alarm>());
-
-        getAlarmData(0, 15);
-
     }
 
-    private void getAlarmData(int start, int limit) {
+    private synchronized void getAlarmData(int start, int limit) {
         RequestParams requestParams = new RequestParams();
         requestParams.add("start", String.valueOf(start));
         requestParams.add("limit",String.valueOf(limit));

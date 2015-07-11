@@ -91,7 +91,11 @@ public class LoginActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "Authentication Failure", Toast.LENGTH_LONG).show();
                 } else if (statusCode == 500) {
                     Toast.makeText(getApplicationContext(), "Something went wrong at server", Toast.LENGTH_LONG).show();
-                } else {
+                } else if(error != null){
+                    Toast.makeText(getApplicationContext(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                }
+
+                else {
                     Toast.makeText(getApplicationContext(), "Unexpected Error occcured!", Toast.LENGTH_LONG).show();
                 }
             }

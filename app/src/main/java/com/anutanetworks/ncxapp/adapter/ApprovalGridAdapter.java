@@ -66,7 +66,11 @@ public class ApprovalGridAdapter extends ArrayAdapter {
         //textView.setText(app.getApproved());
         TextView textView2 = (TextView) gridItemView
                 .findViewById(R.id.description);
-        textView2.setText(app.getDescription());
+        String description = "";
+        for(String s : app.getDescription().split("[,.]")){
+            description +=s.trim() +"\n";
+        }
+        textView2.setText(description);
         TextView textView3 = (TextView) gridItemView
                 .findViewById(R.id.originator);
         textView3.setText(app.getOriginator());

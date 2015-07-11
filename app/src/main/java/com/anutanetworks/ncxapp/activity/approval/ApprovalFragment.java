@@ -27,6 +27,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,14 +75,22 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mAdapter = new ApprovalGridAdapter(getActivity(), new ArrayList<Approval>());
-        getApprovalData(0, 10);
-
     }
 
     private void getApprovalData(int start, int limit) {
         RequestParams requestParams = new RequestParams();
-        requestParams.add("start",String.valueOf(start));
-        requestParams.add("limit",String.valueOf(limit));
+        requestParams.add("start", String.valueOf(start));
+        requestParams.add("limit", String.valueOf(limit));
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("property","date");
+            jsonObject.put("direction", "DESC");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+        requestParams.add("sort",jsonArray.toString());
         AnutaRestClient.get("/rest/workflowtasks", requestParams, new JsonHttpResponseHandler() {
            @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
