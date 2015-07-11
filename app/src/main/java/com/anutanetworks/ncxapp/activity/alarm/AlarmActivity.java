@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.alarm;
 
 import android.content.Intent;
 import android.os.Bundle;

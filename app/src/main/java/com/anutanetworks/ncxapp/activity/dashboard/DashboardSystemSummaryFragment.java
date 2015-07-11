@@ -1,5 +1,6 @@
 package com.anutanetworks.ncxapp.activity.dashboard;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.AlarmsSummary;
@@ -40,48 +42,56 @@ public class DashboardSystemSummaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_system_summary, container, false);
 
-        AnutaRestClient.get("/rest/tasks/summary", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    final TasksSummary tasksSummary = objectMapper.readValue(response.toString(), TasksSummary.class);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateSystemSummaryData(tasksSummary);
-                        }
-                    });
+        getSystemSummaryData();
+        getAlarmSummaryData();
+        return view;
+    }
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                  JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
-
-
+    private void getAlarmSummaryData() {
         AnutaRestClient.get("/rest/alarms/summary", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     ObjectMapper objectMapper = new ObjectMapper();
                     final AlarmsSummary alarmsSummary = objectMapper.readValue(response.toString(), AlarmsSummary.class);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateAlarmSummaryData(alarmsSummary);
-                        }
-                    });
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateAlarmSummaryData(alarmsSummary);
+                            }
+                        });
+                    }
+               } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+             @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                  JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                 Toast.makeText(getActivity(), "Unable to Load Alarm Summary Data", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getSystemSummaryData() {
+        AnutaRestClient.get("/rest/tasks/summary", null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    final TasksSummary tasksSummary = objectMapper.readValue(response.toString(), TasksSummary.class);
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateSystemSummaryData(tasksSummary);
+                            }
+                        });
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -89,16 +99,12 @@ public class DashboardSystemSummaryFragment extends Fragment {
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-            }
-
-            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                   JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(getActivity(), "Unable to Load System Summary Data", Toast.LENGTH_LONG).show();
             }
         });
-        return view;
     }
 
     private void updateSystemSummaryData(TasksSummary tasksSummary) {

@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.approval;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,6 +12,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
@@ -41,22 +42,12 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
     private String mParam1;
     private String mParam2;
 
-
-    /**
-     * The fragment's ListView/GridView.
-     */
     private AbsListView mListView;
 
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
+
     private ApprovalGridAdapter mAdapter;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public ApprovalFragment() {
     }
 
@@ -80,11 +71,12 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mAdapter = new ApprovalGridAdapter(getActivity(), new ArrayList<Approval>());
-        AnutaRestClient.get("/rest/workflowtasks", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-            }
+        getApprovalData();
 
+    }
+
+    private void getApprovalData() {
+        AnutaRestClient.get("/rest/workflowtasks", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 try {
@@ -93,25 +85,26 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
                     Object val1 = response.toString();
                     final ArrayList<Approval> approvals = objectMapper1.readValue(val1.toString(), new TypeReference<List<Approval>>() {
                     });
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mAdapter.updateApprovalEntries(approvals);
-                        }
-                    });
-
+                    Activity activity = getActivity();
+                    if (activity != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                mAdapter.updateApprovalEntries(approvals);
+                            }
+                        });
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
 
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(getActivity(), "Unable to Load Approval Data", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     @Override

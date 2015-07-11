@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.approval;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -22,7 +22,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,6 +42,13 @@ public class ApprovalActivity extends Activity implements View.OnClickListener {
         id = bundle.getString("id");
         setContentView(R.layout.activity_approval_grid);
 
+        getApprovalDetailData();
+        acceptb = (Button) findViewById(R.id.acceptbtn);
+        acceptb.setOnClickListener(this);
+
+    }
+
+    private void getApprovalDetailData() {
         AnutaRestClient.get("/rest/workflowtasks/" + id, null, new JsonHttpResponseHandler() {
 
             @Override
@@ -64,17 +70,11 @@ public class ApprovalActivity extends Activity implements View.OnClickListener {
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-            }
-
-            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(getApplicationContext(), "Unable to Load Approval Detail Data", Toast.LENGTH_LONG).show();
             }
         });
-        acceptb = (Button) findViewById(R.id.acceptbtn);
-        acceptb.setOnClickListener(this);
-
     }
 
     @Override
@@ -124,27 +124,6 @@ public class ApprovalActivity extends Activity implements View.OnClickListener {
             }
         });
 
-
-            /* btnLogin.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(txtUsername.getText().toString().trim().length() > 0 && txtPassword.getText().toString().trim().length() > 0)
-                    {
-                        // Validate Your login credential here than display message
-                        Toast.makeText(Pulse7LoginDialogActivity.this,
-                                "Login Sucessfull", Toast.LENGTH_LONG).show();
-
-                        // Redirect to dashboard / home screen.
-                        login.dismiss();
-                    }
-                    else
-                    {
-                        Toast.makeText(Pulse7LoginDialogActivity.this,
-                                "Please enter Username and Password", Toast.LENGTH_LONG).show();
-
-                    }
-                }
-            });*/
         canclebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

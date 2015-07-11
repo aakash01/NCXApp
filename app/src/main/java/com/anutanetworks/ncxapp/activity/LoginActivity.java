@@ -46,7 +46,7 @@ public class LoginActivity extends Activity {
         passwordText = (EditText) findViewById(R.id.login_password);
         organizationText = (EditText) findViewById(R.id.login_organization);
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Authenticating babua...");
+        progressDialog.setMessage("Authenticating ...");
         progressDialog.setCancelable(false);
     }
 

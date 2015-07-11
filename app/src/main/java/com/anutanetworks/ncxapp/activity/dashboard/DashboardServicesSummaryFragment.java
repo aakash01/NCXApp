@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.Capacity;
@@ -52,6 +53,12 @@ public class DashboardServicesSummaryFragment extends Fragment {
         mChart = (BarChart) view.findViewById(R.id.serviceSummaryChart);
 
         mChart.setDescription("");
+        getSummaryData();
+        return view;
+    }
+    private void getSummaryData()
+
+    {
         AnutaRestClient.get("/rest/capacities/filter/top?componentType=SERVICE&capacityType&count=0", null,
                 new JsonHttpResponseHandler() {
                     @Override
@@ -66,7 +73,7 @@ public class DashboardServicesSummaryFragment extends Fragment {
                                     .readValue(response.toString(), new TypeReference<List<Capacity>>() {
                                     });
                             Activity activity = getActivity();
-                            if(null == activity){
+                            if (null == activity) {
                                 return;
                             }
                             activity.runOnUiThread(new Runnable() {
@@ -85,11 +92,10 @@ public class DashboardServicesSummaryFragment extends Fragment {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                           JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Toast.makeText(getActivity(), "Unable to Load Service Summary Data", Toast.LENGTH_LONG).show();
                     }
                 });
-        return view;
     }
-
 
     private void addData(List<Capacity> capacities) {
         capacitylist = capacities;

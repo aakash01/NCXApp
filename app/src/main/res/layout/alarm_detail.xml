@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/root"
-    tools:context="com.anutanetworks.ncxapp.activity.AlarmActivity">
+    tools:context="com.anutanetworks.ncxapp.activity.alarm.AlarmActivity">
 
 
     <include

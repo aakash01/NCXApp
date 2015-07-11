@@ -38,7 +38,14 @@ public class DashboardAlarmSummaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.alarm_summary, container, false);
+            DashboardAAlarmRestClient();
 
+        return view;
+    }
+
+    private void DashboardAAlarmRestClient()
+
+    {
         AnutaRestClient.get("/rest/alarms/summary", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -67,9 +74,7 @@ public class DashboardAlarmSummaryFragment extends Fragment {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
-        return view;
     }
-
     private void addData(AlarmsSummary alarmsSummary) {
         TextView alarmCritical = (TextView) view.findViewById(R.id.alarmCritical);
         alarmCritical.setText(String.valueOf(alarmsSummary.getCritical()));

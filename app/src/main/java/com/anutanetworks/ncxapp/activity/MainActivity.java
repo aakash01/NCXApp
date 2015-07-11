@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.anutanetworks.ncxapp.R;
+import com.anutanetworks.ncxapp.activity.alarm.AlarmFragment;
+import com.anutanetworks.ncxapp.activity.approval.ApprovalFragment;
 import com.anutanetworks.ncxapp.activity.dashboard.DashboardFragment;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }

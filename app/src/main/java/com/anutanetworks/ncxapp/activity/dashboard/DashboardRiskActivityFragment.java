@@ -1,5 +1,6 @@
 package com.anutanetworks.ncxapp.activity.dashboard;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.Capacity;
@@ -44,45 +46,22 @@ public class DashboardRiskActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_risk_summary, container, false);
-        AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_CAPACITY&count=5", null,
-                new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        try {
-                            ObjectMapper objectMapper = new ObjectMapper();
-                            final ArrayList<Capacity> capacities = objectMapper
-                                    .readValue(response.toString(), new TypeReference<List<Capacity>>() {
-                                    });
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addData(capacities);
-                                }
-                            });
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                          JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                    }
-                });
 
 
+
+
+        getRiskHealthData();
+        getRiskCapacityData();
+        getRiskWorkloadData();
+
+        return view;
+    }
+
+
+
+    private void getRiskHealthData() {
         AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_HEALTH&count=5", null,
                 new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    }
-
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                         try {
@@ -90,13 +69,15 @@ public class DashboardRiskActivityFragment extends Fragment {
                             final ArrayList<Capacity> healths = objectMapper
                                     .readValue(response.toString(), new TypeReference<List<Capacity>>() {
                                     });
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addhealth(healths);
-                                }
-                            });
-
+                            Activity activity = getActivity();
+                            if (activity != null) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        addhealth(healths);
+                                    }
+                                });
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -106,29 +87,62 @@ public class DashboardRiskActivityFragment extends Fragment {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                           JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Health Data", Toast.LENGTH_LONG).show();
                     }
                 });
-
-        AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_WORKLOAD&count=5", null,
+    }
+    private void getRiskCapacityData() {
+        AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_CAPACITY&count=5", null,
                 new JsonHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        try {
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            final ArrayList<Capacity> capacities = objectMapper
+                                    .readValue(response.toString(), new TypeReference<List<Capacity>>() {
+                                    });
+                            Activity activity = getActivity();
+                            if (activity != null) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        addData(capacities);
+                                    }
+                                });
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                          JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Utilized Capacity Data", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void getRiskWorkloadData() {
+        AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_WORKLOAD&count=5", null,
+                new JsonHttpResponseHandler() {
+                   @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                         try {
                             ObjectMapper objectMapper = new ObjectMapper();
                             final ArrayList<Capacity> works = objectMapper
                                     .readValue(response.toString(), new TypeReference<List<Capacity>>() {
                                     });
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    addwork(works);
-                                }
-                            });
-
+                            Activity activity = getActivity();
+                            if (activity != null) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        addwork(works);
+                                    }
+                                });
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -138,11 +152,12 @@ public class DashboardRiskActivityFragment extends Fragment {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                           JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Workload Data", Toast.LENGTH_LONG).show();
                     }
                 });
-
-        return view;
     }
+
+
 
     private void addData(List<Capacity> capacities) {
         capacitylists = capacities;

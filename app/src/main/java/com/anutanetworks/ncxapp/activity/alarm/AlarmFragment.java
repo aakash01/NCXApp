@@ -1,10 +1,9 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.alarm;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -63,6 +62,11 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
         mAdapter = new AlarmGridAdapter(getActivity(), new ArrayList<Alarm>());
 
+        getAlarmData();
+
+    }
+
+    private void getAlarmData() {
         AnutaRestClient.get("/rest/alarms", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -85,18 +89,11 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
-
-                Log.d("something", "someting");
-            }
-
-            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(getActivity(), "Unable to Load Alarm Data", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     @Override
@@ -151,8 +148,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                             e.printStackTrace();
                         }
                     }
-
-                    final boolean isAcknowledge = isAck;
+                   final boolean isAcknowledge = isAck;
                     AnutaRestClient.post(getActivity(), posturl, entity, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
