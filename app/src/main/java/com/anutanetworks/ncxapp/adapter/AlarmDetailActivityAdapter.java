@@ -53,7 +53,7 @@ public class AlarmDetailActivityAdapter extends ArrayAdapter {
 
         if (convertView == null) {
             gridItemView = new View(context);
-            gridItemView = inflater.inflate(R.layout.activit_alarm_detail_item, null);
+            gridItemView = inflater.inflate(R.layout.activity_alarm_detail_list_item_, null);
         } else {
             gridItemView = (View) convertView;
         }

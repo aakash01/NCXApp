@@ -106,7 +106,7 @@ public class LoginActivity extends Activity {
         }
         editor.putString("logged", "logged");
         editor.commit();
-
+        finish();
         Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainIntent);

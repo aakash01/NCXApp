@@ -16,15 +16,7 @@
         android:layout_marginRight="16dp"
             />
 
-<!--    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="alarmtype"
-        android:id="@+id/severityType"
-        android:layout_below="@+id/severityIcon"
-        android:layout_alignParentLeft="true"
-        android:textSize="10dp" />-->
-    <TextView
+<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="alarm state"

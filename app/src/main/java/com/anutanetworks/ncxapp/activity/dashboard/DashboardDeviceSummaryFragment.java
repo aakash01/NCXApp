@@ -61,12 +61,10 @@ public class DashboardDeviceSummaryFragment extends Fragment {
         mChart.setDrawSliceText(false);
 
         mChart.setRotationAngle(0);
-        // enable rotation of the chart by touch
         mChart.setRotationEnabled(true);
 
         mChart.setNoDataText("No Data Available");
 
-        // add a selection listener
         mChart.animateY(1500, Easing.EasingOption.EaseInOutQuad);
         mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override

@@ -55,7 +55,7 @@ public class ApprovalGridAdapter extends ArrayAdapter {
 
         if (convertView == null) {
             gridItemView = new View(context);
-            gridItemView = inflater.inflate(R.layout.fragment_approval_grid_item, null);
+            gridItemView = inflater.inflate(R.layout.fragment_approval_list_item, null);
         } else {
             gridItemView = (View) convertView;
         }

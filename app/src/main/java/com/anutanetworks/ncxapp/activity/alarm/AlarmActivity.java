@@ -43,7 +43,7 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.alarm_detail);
+        setContentView(R.layout.activity_alarm_detail_list_);
         alarmAdapter = new AlarmDetailActivityAdapter(getApplicationContext(), new ArrayList<AlarmDetailItem>());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

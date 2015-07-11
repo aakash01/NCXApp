@@ -45,7 +45,7 @@ public class DashboardFragment extends Fragment {
                 case 1:
                     return new DashboardSystemSummaryFragment();
                 case 2:
-                    return new DashboardRiskActivityFragment();
+                    return new DashboardRiskSummaryFragment();
                 case 3:
                     return new DashboardDeviceSummaryFragment();
             }

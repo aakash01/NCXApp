@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Created by Aakash on 7/8/2015.
  */
-public class DashboardRiskActivityFragment extends Fragment {
+public class DashboardRiskSummaryFragment extends Fragment {
 
     View view = null;
     private List<Capacity> capacitylists;
@@ -161,7 +161,6 @@ public class DashboardRiskActivityFragment extends Fragment {
 
     private void addData(List<Capacity> capacities) {
         capacitylists = capacities;
-        //  for(int i=0;i<capacities.size();i++) {
         Capacity capacity = capacities.get(0);
         TextView util1 = (TextView) view.findViewById(R.id.util1);
         util1.setText(String.valueOf(capacity.getUsed()));

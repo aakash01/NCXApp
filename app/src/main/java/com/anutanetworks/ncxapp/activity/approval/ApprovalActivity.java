@@ -51,7 +51,7 @@ public class ApprovalActivity extends AppCompatActivity  {
         approvalObj = (Approval) i.getSerializableExtra("approvalObject");
 
         id = approvalObj.getId();
-        setContentView(R.layout.activity_approval_grid);
+        setContentView(R.layout.activity_approval_detail_list_);
         commandsAdapter = new ApprovalDetailActivityAdapter(getApplicationContext(), new ArrayList<ApprovalDetailItem>());
         mListView = (AbsListView) findViewById(R.id.commandList);
         ((AdapterView<ListAdapter>) mListView).setAdapter(commandsAdapter);
@@ -98,7 +98,6 @@ public class ApprovalActivity extends AppCompatActivity  {
     }
       @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         boolean approve = false;
         if("Approved".equals(approvalObj.getApproved()) || "Rejected".equals(approvalObj.getApproved())) {
             approve = true;
