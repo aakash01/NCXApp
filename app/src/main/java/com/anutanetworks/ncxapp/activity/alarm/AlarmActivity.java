@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
@@ -24,8 +23,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -38,7 +35,6 @@ import java.util.List;
 public class AlarmActivity extends AppCompatActivity {
 
 
-    // private List<AlarmDetail> alarmDetail;
     private AlarmDetailActivityAdapter alarmAdapter;
     private AbsListView mListView;
     String id;

@@ -6,17 +6,18 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.anutanetworks.ncxapp.R;
+import com.anutanetworks.ncxapp.adapter.ApprovalDetailActivityAdapter;
 import com.anutanetworks.ncxapp.model.Approval;
+import com.anutanetworks.ncxapp.model.ApprovalDetailItem;
 import com.anutanetworks.ncxapp.model.SubUserTask;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,13 +41,21 @@ public class ApprovalActivity extends AppCompatActivity  {
 
     private String id;
     Approval approvalObj = new Approval();
+
+    private ApprovalDetailActivityAdapter commandsAdapter;
+    private AbsListView mListView;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Intent i = getIntent();
         approvalObj = (Approval) i.getSerializableExtra("approvalObject");
 
         id = approvalObj.getId();
         setContentView(R.layout.activity_approval_grid);
+        commandsAdapter = new ApprovalDetailActivityAdapter(getApplicationContext(), new ArrayList<ApprovalDetailItem>());
+        mListView = (AbsListView) findViewById(R.id.commandList);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(commandsAdapter);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -178,17 +188,51 @@ public class ApprovalActivity extends AppCompatActivity  {
     }
 
     private void updateApprovalDataEntries(Approval approval) {
-        TextView det = (TextView) findViewById(R.id.details);
-        TextView comm = (TextView) findViewById(R.id.commands);
-
         List<SubUserTask> tasks = approval.getSubTasks();
+        List<ApprovalDetailItem> listData = new ArrayList<>();
         if (!tasks.isEmpty()) {
             SubUserTask task = tasks.get(0);
-            det.setText(task.getDescription());
-            comm.setText(task.getCommands());
+            ApprovalDetailItem detailHeader = new ApprovalDetailItem();
+            detailHeader.setHeader(true);
+            detailHeader.setValue("Details");
+            listData.add(detailHeader);
+
+            String detailString = "";
+            for(String s : task.getDescription().split(";")){
+                detailString +=s + "\n";
+            }
+
+            ApprovalDetailItem detailData = new ApprovalDetailItem();
+            detailData.setDetailData(true);
+            detailData.setValue(detailString);
+            listData.add(detailData);
+
+            ApprovalDetailItem commandHeader = new ApprovalDetailItem();
+            commandHeader.setHeader(true);
+            commandHeader.setValue("Commands");
+            listData.add(commandHeader);
+
+            String[] commands  = task.getCommands().split("(?=\\b(?:(DEVICE(.*)\\))))");
+
+            for(String command : commands){
+                if(command.contains("Result")){
+                    continue;
+                }
+                String deviceName = command.substring(0,command.indexOf("\n"));
+                String commandItems = command.substring(command.indexOf("\n")+1);
+
+                ApprovalDetailItem device = new ApprovalDetailItem();
+                device.setDevice(true);
+                device.setValue(deviceName);
+                listData.add(device);
+
+                ApprovalDetailItem commandData = new ApprovalDetailItem();
+                commandData.setCommandData(true);
+                commandData.setValue(commandItems);
+                listData.add(commandData);
+            }
         }
-
-
+        commandsAdapter.updateItems(listData);
     }
 
 }
