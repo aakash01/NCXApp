@@ -2,6 +2,7 @@ package com.anutanetworks.ncxapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by Aakash on 7/5/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Approval {
+public class Approval implements Serializable{
     private String id;
     private String processName;
     private String taskName;

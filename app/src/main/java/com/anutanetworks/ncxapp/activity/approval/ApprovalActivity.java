@@ -2,9 +2,16 @@ package com.anutanetworks.ncxapp.activity.approval;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,21 +39,28 @@ import java.util.List;
 /**
  * Created by Aakash on 7/6/2015.
  */
-public class ApprovalActivity extends Activity implements View.OnClickListener {
-    Button acceptb;
-    private String id;
+public class ApprovalActivity extends AppCompatActivity  {
 
+    private String id;
+    Approval approvalObj = new Approval();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getIntent().getExtras();
-        id = bundle.getString("id");
+        Intent i = getIntent();
+        approvalObj = (Approval) i.getSerializableExtra("approvalObject");
+
+        id = approvalObj.getId();
         setContentView(R.layout.activity_approval_grid);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("Approval Detail");
+        actionBar.setDisplayUseLogoEnabled(false);
 
         getApprovalDetailData();
-        acceptb = (Button) findViewById(R.id.acceptbtn);
-        acceptb.setOnClickListener(this);
-
-    }
+ }
 
     private void getApprovalDetailData() {
         AnutaRestClient.get("/rest/workflowtasks/" + id, null, new JsonHttpResponseHandler() {
@@ -76,18 +90,56 @@ public class ApprovalActivity extends Activity implements View.OnClickListener {
             }
         });
     }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_approval, container, false);
+        return view;
+    }
 
     @Override
-    public void onClick(View v) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_approval_detail, menu);
+        return true;
+    }
+    String posturl = null;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem approveMenu) {
+       int menuid = approveMenu.getItemId();
+
+        switch (approveMenu.getItemId())
+        {
+            case R.id.approved:
+                posturl =  "/rest/workflowtasks/" + id + "/action/approve";
+                Dialog approval = new Dialog(this);
+                approval.setContentView(R.layout.prompt);
+                approval.setTitle("Approve");
+                Button canclebtn = (Button) approval.findViewById(R.id.cancel);
+                EditText txtmsg = (EditText) approval.findViewById(R.id.msg);
+                Button ok = (Button) approval.findViewById(R.id.okbtn);
+
+                changeApprovedStatus(approval, canclebtn, txtmsg, ok);
+                approval.show();
+                break;
+
+            case R.id.reject:
+                posturl = "/rest/workflowtasks/" + id + "/action/reject";
+                approval = new Dialog(this);
+                approval.setContentView(R.layout.prompt);
+                approval.setTitle("Reject");
+                canclebtn = (Button) approval.findViewById(R.id.cancel);
+                txtmsg = (EditText) approval.findViewById(R.id.msg);
+                ok = (Button) approval.findViewById(R.id.okbtn);
+                changeApprovedStatus(approval, canclebtn, txtmsg, ok);
+               approval.show();
+                break;
+        }
 
 
-        final Dialog approval = new Dialog(this);
-        approval.setContentView(R.layout.prompt);
-        approval.setTitle("Approve");
-        final Button canclebtn = (Button) approval.findViewById(R.id.cancel);
-        final EditText txtmsg = (EditText) approval.findViewById(R.id.msg);
-        final Button ok = (Button) approval.findViewById(R.id.okbtn);
+        return super.onOptionsItemSelected(approveMenu);
+    }
 
+    private void changeApprovedStatus(final Dialog approval, Button canclebtn, final EditText txtmsg, Button ok) {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,11 +158,12 @@ public class ApprovalActivity extends Activity implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-                AnutaRestClient.post(getApplicationContext(), "/rest/workflowtasks/" + id + "/action/approve", entity, new AsyncHttpResponseHandler() {
+                AnutaRestClient.post(getApplicationContext(), posturl, entity, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        Toast.makeText(getApplicationContext(), "successfully approved!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "successfully done!", Toast.LENGTH_LONG).show();
                         approval.dismiss();
+
                     }
 
                     @Override
@@ -130,23 +183,6 @@ public class ApprovalActivity extends Activity implements View.OnClickListener {
                 approval.dismiss();
             }
         });
-
-
-        approval.show();
-    }
-
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_approval, container, false);
-        return view;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
 

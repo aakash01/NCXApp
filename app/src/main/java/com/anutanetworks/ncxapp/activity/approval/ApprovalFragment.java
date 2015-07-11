@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
+import com.anutanetworks.ncxapp.activity.alarm.AlarmActivity;
 import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
+import com.anutanetworks.ncxapp.model.Alarm;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.anutanetworks.ncxapp.services.EndlessScrollListener;
@@ -31,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,11 +161,9 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Approval item = (Approval) mAdapter.getItem(position);
-        String aid = item.getId();
+        Approval approvalObj = (Approval) mAdapter.getItem(position);
         Intent i = new Intent(view.getContext(), ApprovalActivity.class);
-        i.putExtra("id", aid);
-
+        i.putExtra("approvalObject", (Serializable) approvalObj);
         startActivity(i);
 
 
