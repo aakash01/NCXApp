@@ -1,5 +1,6 @@
 package com.anutanetworks.ncxapp.activity.dashboard;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -64,7 +65,11 @@ public class DashboardServicesSummaryFragment extends Fragment {
                             final ArrayList<Capacity> capacities = objectMapper
                                     .readValue(response.toString(), new TypeReference<List<Capacity>>() {
                                     });
-                            getActivity().runOnUiThread(new Runnable() {
+                            Activity activity = getActivity();
+                            if(null == activity){
+                                return;
+                            }
+                            activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     addData(capacities);

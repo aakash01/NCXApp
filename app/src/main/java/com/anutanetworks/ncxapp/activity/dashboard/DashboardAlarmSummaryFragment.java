@@ -1,4 +1,4 @@
-package com.anutanetworks.ncxapp.activity;
+package com.anutanetworks.ncxapp.activity.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +23,7 @@ import java.io.IOException;
 /**
  * Created by Aakash on 7/8/2015.
  */
-public class AlarmSummaryFragment extends Fragment {
+public class DashboardAlarmSummaryFragment extends Fragment {
 
 
     View view = null;

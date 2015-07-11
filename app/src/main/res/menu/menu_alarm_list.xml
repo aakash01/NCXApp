@@ -3,7 +3,4 @@
     <item
             android:id="@+id/Ack"
             android:title="Acknowledge"/>
-
-
-
 </menu>

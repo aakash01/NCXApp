@@ -1,32 +1,20 @@
 package com.anutanetworks.ncxapp.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.Menu;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.adapter.AlarmDetailActivityAdapter;
 import com.anutanetworks.ncxapp.model.Alarm;
-import com.anutanetworks.ncxapp.model.AlarmDetail;
 import com.anutanetworks.ncxapp.model.AlarmDetailItem;
-import com.anutanetworks.ncxapp.model.Approval;
-import com.anutanetworks.ncxapp.model.Capacity;
-import com.anutanetworks.ncxapp.services.AnutaRestClient;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +23,7 @@ import java.util.List;
 /**
  * Created by Aakash on 7/8/2015.
  */
-public class AlarmActivity extends Activity {
+public class AlarmActivity extends AppCompatActivity {
 
 
     // private List<AlarmDetail> alarmDetail;
@@ -48,8 +36,16 @@ public class AlarmActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_detail);
-
         alarmAdapter = new AlarmDetailActivityAdapter(getApplicationContext(), new ArrayList<AlarmDetailItem>());
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("Alarm Detail");
+        actionBar.setDisplayUseLogoEnabled(false);
 
         mListView = (AbsListView) findViewById(R.id.alarmlist);
         ((AdapterView<ListAdapter>) mListView).setAdapter(alarmAdapter);
@@ -73,8 +69,12 @@ public class AlarmActivity extends Activity {
         items.add(new AlarmDetailItem("Time Of Last Update", String.valueOf(dateString1)));
 
         alarmAdapter.updateItems(items);
+    }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
 }

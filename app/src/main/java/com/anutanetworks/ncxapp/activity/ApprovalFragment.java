@@ -83,8 +83,6 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
         AnutaRestClient.get("/rest/workflowtasks", null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
-
             }
 
             @Override
