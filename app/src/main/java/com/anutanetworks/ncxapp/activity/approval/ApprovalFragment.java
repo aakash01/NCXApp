@@ -131,7 +131,7 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
         mListView = (AbsListView) view.findViewById(R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
-        mListView.setOnScrollListener(new EndlessScrollListener(15) {
+        mListView.setOnScrollListener(new EndlessScrollListener(10) {
 
             @Override
             public void onLoadMore(int page, int limit) {
