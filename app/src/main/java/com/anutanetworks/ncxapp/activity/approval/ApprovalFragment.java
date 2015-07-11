@@ -188,6 +188,12 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
+    }
+
     class ApprovalList {
 
         private List<Approval> approvals;

@@ -71,7 +71,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
     private void getAlarmData(int start, int limit) {
         RequestParams requestParams = new RequestParams();
-        requestParams.add("start",String.valueOf(start));
+        requestParams.add("start", String.valueOf(start));
         requestParams.add("limit",String.valueOf(limit));
 
         AnutaRestClient.get("/rest/alarms", requestParams, new JsonHttpResponseHandler() {
@@ -92,7 +92,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }
@@ -172,7 +172,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                            Log.d("internal-error",error.getLocalizedMessage());
+                            Log.d("internal-error", error.getLocalizedMessage());
                             Toast.makeText(getActivity(), " Error occcured!", Toast.LENGTH_LONG).show();
 
                         }
@@ -233,8 +233,8 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             @Override
             public void onLoadMore(int page, int limit) {
                 swipeRefreshLayout.setRefreshing(true);
-                int start  = (page-1)*limit;
-                Log.d("aakash", "load more data with start " + start + " and limit " +limit);
+                int start = (page - 1) * limit;
+                Log.d("aakash", "load more data with start " + start + " and limit " + limit);
                 getAlarmData(start, limit);
             }
         });
@@ -287,6 +287,13 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         getAlarmData(0,15);
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
+    }
+
 
     class AlarmList {
         private List<Alarm> alarms;
