@@ -52,6 +52,11 @@ public class DashboardServicesSummaryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_service_summary, container, false);
         mChart = (BarChart) view.findViewById(R.id.serviceSummaryChart);
         mChart.setDescription("");
+        mChart.setDrawValueAboveBar(true);
+        mChart.setDrawHighlightArrow(true);
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawGridBackground(true);
+        mChart.setDrawValuesForWholeStack(true);
         getSummaryData();
         return view;
     }
