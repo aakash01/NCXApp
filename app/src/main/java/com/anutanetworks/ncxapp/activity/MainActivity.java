@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             finish();
             Intent i = new Intent(getApplicationContext(),LoginActivity.class);
             startActivity(i);
-
         }
 
         return super.onOptionsItemSelected(item);

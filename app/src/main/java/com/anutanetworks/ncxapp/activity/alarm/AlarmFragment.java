@@ -143,6 +143,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         mListView.setOnItemLongClickListener(this);
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            private boolean removeSelections = true;
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 final int checkedCount = mListView.getCheckedItemCount();
@@ -156,6 +157,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             public boolean onActionItemClicked(ActionMode mode, final MenuItem item) {
                 boolean isAck = false;
                 String posturl = null;
+                removeSelections = false;
                 switch (item.getItemId()) {
                     case R.id.Ack:
                         isAck = true;
@@ -174,7 +176,6 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                     for (int i = (selected.size() - 1); i >= 0; i--) {
                         try {
                             Alarm selecteditem = mAdapter.getItem(selected.keyAt(i));
-
                             data.put(selecteditem.getId());
                             entity = new StringEntity(data.toString());
                         } catch (UnsupportedEncodingException e) {
@@ -188,14 +189,14 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
                             mAdapter.updateItemsValue(isAcknowledge);
                             Toast.makeText(getActivity(), "Successfully " + (isAcknowledge ? "Acknowledged" : "Unacknowledged"), Toast.LENGTH_LONG).show();
-
+                            removeSelections= true;
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                             Log.d("internal-error", error.getLocalizedMessage());
                             Toast.makeText(getActivity(), " Error occcured!", Toast.LENGTH_LONG).show();
-
+                            removeSelections= true;
                         }
                     });
                 }
@@ -215,7 +216,9 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 // TODO Auto-generated method stub
-                mAdapter.removeSelection();
+                if(removeSelections) {
+                    mAdapter.removeSelection();
+                }
                 mListView.clearChoices();
             }
 
