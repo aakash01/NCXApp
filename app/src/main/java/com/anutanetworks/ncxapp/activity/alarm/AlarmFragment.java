@@ -10,6 +10,7 @@ import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,9 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
     private AlarmGridAdapter mAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private boolean onlyUnacknowledgedAlarm;
+    private boolean onlyActiveAlarm;
+
     public AlarmFragment() {
     }
 
@@ -64,13 +68,33 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         super.onCreate(savedInstanceState);
 
         mAdapter = new AlarmGridAdapter(getActivity(), new ArrayList<Alarm>());
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_alarm_filter, menu);
     }
 
     private synchronized void getAlarmData(int start, int limit) {
         RequestParams requestParams = new RequestParams();
         requestParams.add("start", String.valueOf(start));
         requestParams.add("limit",String.valueOf(limit));
-
+        if(onlyUnacknowledgedAlarm) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("property", "acknowledged");
+                jsonObject.put("value", false);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(jsonObject);
+            requestParams.add("filter", jsonArray.toString());
+        }
+        if(onlyActiveAlarm){
+            requestParams.add("query", "ACTIVE");
+        }
         AnutaRestClient.get("/rest/alarms", requestParams, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -282,7 +306,6 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         swipeRefreshLayout.setRefreshing(true);
         mAdapter.clear();
         getAlarmData(0,15);
-
     }
 
     @Override
@@ -291,6 +314,29 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         onRefresh();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.isChecked())
+            item.setChecked(false);
+        else
+            item.setChecked(true);
+        boolean reloadData = false;
+        switch (item.getItemId()) {
+            case R.id.onlyUnackFilter:
+                onlyUnacknowledgedAlarm = item.isChecked();
+                reloadData = true;
+                break;
+            case R.id.onlyActiveFilter:
+                onlyActiveAlarm = item.isChecked();
+                reloadData = true;
+                break;
+        }
+        if(reloadData){
+            onRefresh();
+        }
+
+        return true;
+    }
 
     class AlarmList {
         private List<Alarm> alarms;

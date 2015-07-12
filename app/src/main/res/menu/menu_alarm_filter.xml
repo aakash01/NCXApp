@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_search"
+        android:title="Filter"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_filter"
+        app:showAsAction="ifRoom" >
+    <menu>
+        <group
+            android:checkableBehavior="all"
+            >
+            <item android:id="@+id/onlyUnackFilter"
+                android:title="Only Unacknowledged"
+                android:orderInCategory="100"
+                android:showAsAction="never" />
+
+            <item android:id="@+id/onlyActiveFilter"
+                android:title="Only Active"
+                android:orderInCategory="100"
+                android:showAsAction="never"/>
+        </group>
+    </menu>
+    </item>
+
+</menu>

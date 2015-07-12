@@ -31,7 +31,7 @@
         android:text="ackn"
         android:id="@+id/acknw"
         android:textSize="10dp"
-        android:layout_alignBottom="@+id/alarmtype"
+        android:layout_below="@id/alarmstate"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -56,6 +56,7 @@
         android:id="@+id/alarmtype"
         android:layout_below="@+id/component"
         android:layout_toRightOf="@+id/severityIcon"
+        android:layout_toLeftOf="@id/acknw"
         android:layout_toEndOf="@+id/severityIcon"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
