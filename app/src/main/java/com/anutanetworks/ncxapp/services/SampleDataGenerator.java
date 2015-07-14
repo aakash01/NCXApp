@@ -20,12 +20,13 @@ public class SampleDataGenerator {
 
     public static String getRandomString(int min, int max){
         StringBuffer buffer = new StringBuffer();
-        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String characters = "abcdefghijklmnopqrstuvwxyz";
+        String capital = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         int charactersLength = characters.length();
 
         for (int i = 0; i < randInt(min,max); i++) {
             double index = Math.random() * charactersLength;
-            buffer.append(characters.charAt((int) index));
+            buffer.append(i==0? capital.charAt((int) index):characters.charAt((int) index));
         }
         return buffer.toString();
     }
@@ -59,6 +60,18 @@ public class SampleDataGenerator {
         ArrayList<Capacity> capacities = new ArrayList<>();
 
         for(int i=0;i<randInt(2,20);i++){
+            Capacity c = new Capacity();
+            c.setUsed(randInt(1,100));
+            c.setComponentName(getRandomString(5, 10));
+            capacities.add(c);
+        }
+        return capacities;
+    }
+
+    public static ArrayList<Capacity> getRiskData(){
+        ArrayList<Capacity> capacities = new ArrayList<>();
+
+        for(int i=0;i<5;i++){
             Capacity c = new Capacity();
             c.setUsed(randInt(1,100));
             c.setComponentName(getRandomString(5,10));
