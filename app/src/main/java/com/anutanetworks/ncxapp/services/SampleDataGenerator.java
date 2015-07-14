@@ -37,7 +37,7 @@ public class SampleDataGenerator {
         boolean[] isAck = {true,false};
         ArrayList<Alarm> alarms = new ArrayList<>();
         Alarm alarm;
-        for(int i=0;i<30;i++){
+        for(int i=0;i<15;i++){
             alarm = new Alarm();
             int j = randInt(0,4);
             int k = randInt(0,1);
