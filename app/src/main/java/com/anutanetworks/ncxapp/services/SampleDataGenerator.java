@@ -4,9 +4,11 @@ import com.anutanetworks.ncxapp.model.Alarm;
 import com.anutanetworks.ncxapp.model.AlarmsSummary;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.model.Capacity;
+import com.anutanetworks.ncxapp.model.SubUserTask;
 import com.anutanetworks.ncxapp.model.TasksSummary;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -128,11 +130,25 @@ public class SampleDataGenerator {
 
     public static AlarmsSummary getAlarmSummary() {
         AlarmsSummary alarmsSummary = new AlarmsSummary();
-        alarmsSummary.setCritical(randInt(0,30));
+        alarmsSummary.setCritical(randInt(0, 30));
         alarmsSummary.setInfo(randInt(0, 30));
         alarmsSummary.setMajor(randInt(0, 30));
         alarmsSummary.setMinor(randInt(0, 30));
-        alarmsSummary.setWarning(randInt(0,30));
+        alarmsSummary.setWarning(randInt(0, 30));
         return alarmsSummary;
+    }
+
+    public static Approval getApprovalDetail(){
+        Approval approval = new Approval();
+        approval.setTaskName("Authentication for Provisioning resources");
+        SubUserTask userTask = new SubUserTask();
+        userTask.setDescription("Tenant = Cisco;VDC =  SimpleService;Service = vdc-l3-vn;Resource Pool = sys_ubc_pod;Pod = ubc_pod;Data Center = Vancou");
+        userTask.setCommands("Result: DEVICE: ubc_ac-sw-1 (172.16.202.3)\n\n   vlan 1000\n   name Cisco_01_C2R_01\n\n   interface Gi1/2\n   switchport\n   switchport trunk encapsulation dot1q\n   switchport mode trunk\n   switchport trunk allowed vlan add 1000\n   no shutdown\n\n   interface Gi1/1\n   switchport\n   switchport trunk encapsulation dot1q\n   switchport mode trunk\n   switchport trunk allowed vlan add 1000\n   no shutdown\n\nDEVICE: ubc_ac-sw-2 (172.16.202.4)\n\n   vlan 1000\n   name Cisco_01_C2R_01\n\n   interface Gi1/1\n   switchport\n   switchport mode trunk\n   switchport trunk allowed vlan add 1000\n   no shutdown\n\nDEVICE: ubc_db-sw (172.16.202.2)\n\n   vlan 1000\n   name Cisco_01_C2R_01\n\n   interface Gi1/2\n   switchport\n   switchport trunk encapsulation dot1q\n   switchport mode trunk\n   switchport trunk allowed vlan add 1000\n   no shutdown\n\n   ip vrf Cisco_01_01_01_R\n\n   interface vlan 1000\n   description Cisco_01_R2C_sdasf\n   ip vrf forwarding Cisco_01_01_01_R\n   ip address 192.168.22.1 255.255.255.248\n   no shutdown\n\n\n");
+        userTask.setResName("SimpleService");
+        userTask.setResDisplayName("VDC");
+        List<SubUserTask> list = new ArrayList<>();
+        list.add(userTask);
+        approval.setSubTasks(list);
+        return approval;
     }
 }

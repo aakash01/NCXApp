@@ -21,6 +21,7 @@ import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.model.ApprovalDetailItem;
 import com.anutanetworks.ncxapp.model.SubUserTask;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.anutanetworks.ncxapp.services.SampleDataGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -70,32 +71,36 @@ public class ApprovalActivity extends AppCompatActivity  {
  }
 
     private void getApprovalDetailData() {
-        AnutaRestClient.get("/rest/workflowtasks/" + id, null, new JsonHttpResponseHandler() {
+        if(AnutaRestClient.isAllowOffline()){
+            updateApprovalDataEntries(SampleDataGenerator.getApprovalDetail());
+        } else {
+            AnutaRestClient.get("/rest/workflowtasks/" + id, null, new JsonHttpResponseHandler() {
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
 
-                    ObjectMapper objectMapper1 = new ObjectMapper();
-                    Object val1 = response.toString();
-                    final Approval approvalData = objectMapper1.readValue(val1.toString(), Approval.class);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            updateApprovalDataEntries(approvalData);
-                        }
-                    });
+                        ObjectMapper objectMapper1 = new ObjectMapper();
+                        Object val1 = response.toString();
+                        final Approval approvalData = objectMapper1.readValue(val1.toString(), Approval.class);
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                updateApprovalDataEntries(approvalData);
+                            }
+                        });
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Toast.makeText(getApplicationContext(), "Unable to Load Approval Detail Data", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    Toast.makeText(getApplicationContext(), "Unable to Load Approval Detail Data", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
       @Override
     public boolean onCreateOptionsMenu(Menu menu) {
