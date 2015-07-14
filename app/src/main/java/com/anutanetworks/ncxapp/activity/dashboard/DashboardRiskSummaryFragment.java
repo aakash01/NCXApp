@@ -118,36 +118,40 @@ public class DashboardRiskSummaryFragment extends Fragment {
     }
 
     private void getRiskWorkloadData() {
-        AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_WORKLOAD&count=5", null,
-                new JsonHttpResponseHandler() {
-                   @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        try {
-                            ObjectMapper objectMapper = new ObjectMapper();
-                            final ArrayList<Capacity> works = objectMapper
-                                    .readValue(response.toString(), new TypeReference<List<Capacity>>() {
-                                    });
-                            Activity activity = getActivity();
-                            if (activity != null) {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        addwork(works);
-                                    }
-                                });
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+        if(AnutaRestClient.isAllowOffline()){
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                          JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Workload Data", Toast.LENGTH_LONG).show();
-                    }
-                });
+        }else {
+            AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_WORKLOAD&count=5", null,
+                    new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                            try {
+                                ObjectMapper objectMapper = new ObjectMapper();
+                                final ArrayList<Capacity> works = objectMapper
+                                        .readValue(response.toString(), new TypeReference<List<Capacity>>() {
+                                        });
+                                Activity activity = getActivity();
+                                if (activity != null) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addwork(works);
+                                        }
+                                    });
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                              JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Workload Data", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
     }
 
 

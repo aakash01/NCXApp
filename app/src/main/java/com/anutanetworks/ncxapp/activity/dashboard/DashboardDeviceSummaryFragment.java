@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.Capacity;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.anutanetworks.ncxapp.services.SampleDataGenerator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mikephil.charting.animation.Easing;
@@ -80,33 +81,37 @@ public class DashboardDeviceSummaryFragment extends Fragment {
     }
 
        private void getDeviceSummaryData() {
-           AnutaRestClient.get("/rest/devices/summary/filter/vendor", null, new JsonHttpResponseHandler() {
-               @Override
-               public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                   try {
-                       ObjectMapper objectMapper = new ObjectMapper();
-                       final ArrayList<Capacity> capacities = objectMapper
-                               .readValue(response.toString(), new TypeReference<List<Capacity>>() {
-                               });
-                       getActivity().runOnUiThread(new Runnable() {
-                           @Override
-                           public void run() {
-                               addData(capacities);
-                           }
-                       });
+           if(AnutaRestClient.isAllowOffline()){
+               addData(SampleDataGenerator.getDeviceCapacities());
+           }else {
+               AnutaRestClient.get("/rest/devices/summary/filter/vendor", null, new JsonHttpResponseHandler() {
+                   @Override
+                   public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                       try {
+                           ObjectMapper objectMapper = new ObjectMapper();
+                           final ArrayList<Capacity> capacities = objectMapper
+                                   .readValue(response.toString(), new TypeReference<List<Capacity>>() {
+                                   });
+                           getActivity().runOnUiThread(new Runnable() {
+                               @Override
+                               public void run() {
+                                   addData(capacities);
+                               }
+                           });
 
-                   } catch (IOException e) {
-                       e.printStackTrace();
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       }
                    }
-               }
 
-               @Override
-               public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                     JSONObject errorResponse) {
-                   super.onFailure(statusCode, headers, throwable, errorResponse);
-                   Toast.makeText(getActivity(), "Unable to Load Device Summary Data", Toast.LENGTH_LONG).show();
-               }
-           });
+                   @Override
+                   public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                         JSONObject errorResponse) {
+                       super.onFailure(statusCode, headers, throwable, errorResponse);
+                       Toast.makeText(getActivity(), "Unable to Load Device Summary Data", Toast.LENGTH_LONG).show();
+                   }
+               });
+           }
        }
     private void addData(List<Capacity> capacities) {
         capacitylist = capacities;
