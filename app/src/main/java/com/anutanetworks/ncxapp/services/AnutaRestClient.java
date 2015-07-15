@@ -4,11 +4,13 @@ import android.content.Context;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
 
 import org.apache.http.HttpEntity;
 
+import java.security.KeyStore;
 import java.util.Map;
 
 /**
@@ -19,6 +21,12 @@ public class AnutaRestClient {
     private static String BASE_URL;
 
     private static AsyncHttpClient client = null;
+
+    private boolean allowOffline = false;
+
+    public static boolean isAllowOffline(){
+        return true;
+    }
 
 
     public static void initializeClient(Map<String, String> paramMap) {
@@ -35,6 +43,17 @@ public class AnutaRestClient {
         client.addHeader("Accept", "application/json");
         client.addHeader("Content-type", "application/json");
         client.setBasicAuth(actualUsername, password);
+        if(BASE_URL.startsWith("https")){
+            try {
+                KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                trustStore.load(null, null);
+                MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
+                sf.setHostnameVerifier(MySSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+                client.setSSLSocketFactory(sf);
+            }
+            catch (Exception e) {
+            }
+        }
     }
 
     public static void get(String url, RequestParams requestParams, AsyncHttpResponseHandler responseHandler) {

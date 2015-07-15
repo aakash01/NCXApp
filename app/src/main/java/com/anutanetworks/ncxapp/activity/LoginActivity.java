@@ -79,7 +79,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 progressDialog.hide();
-                Toast.makeText(getApplicationContext(), "You are successfully logged in!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Welcome "+paramMap.get("username")+"!", Toast.LENGTH_LONG).show();
                 navigatetoMainActivity(paramMap);
             }
 

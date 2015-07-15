@@ -26,6 +26,7 @@ import com.anutanetworks.ncxapp.adapter.AlarmGridAdapter;
 import com.anutanetworks.ncxapp.model.Alarm;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.anutanetworks.ncxapp.services.EndlessScrollListener;
+import com.anutanetworks.ncxapp.services.SampleDataGenerator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -95,36 +96,43 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         if(onlyActiveAlarm){
             requestParams.add("query", "ACTIVE");
         }
-        AnutaRestClient.get("/rest/alarms", requestParams, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    Object val = response.get("data");
-                    final ArrayList<Alarm> alarms = objectMapper.readValue(val.toString(), new TypeReference<List<Alarm>>() {
-                    });
-                    getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            mAdapter.updateAlarmEntries(alarms);
+        if(AnutaRestClient.isAllowOffline()){
+            mAdapter.updateAlarmEntries(SampleDataGenerator.getAlarmData());
+        }else {
+            AnutaRestClient.get("/rest/alarms", requestParams, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        Object val = response.get("data");
+                        final ArrayList<Alarm> alarms = objectMapper.readValue(val.toString(), new TypeReference<List<Alarm>>() {
+                        });
+                        if (alarms.size() > 0) {
+                            Toast.makeText(getActivity(), "Loaded " + alarms.size() + " records", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                mAdapter.updateAlarmEntries(alarms);
+                            }
+                        });
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } finally {
-                    swipeRefreshLayout.setRefreshing(false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } finally {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), "Unable to Load Alarm Data", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), "Unable to Load Alarm Data", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -143,6 +151,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
         mListView.setOnItemLongClickListener(this);
         mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            private boolean removeSelections = true;
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 final int checkedCount = mListView.getCheckedItemCount();
@@ -156,6 +165,7 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             public boolean onActionItemClicked(ActionMode mode, final MenuItem item) {
                 boolean isAck = false;
                 String posturl = null;
+                removeSelections = false;
                 switch (item.getItemId()) {
                     case R.id.Ack:
                         isAck = true;
@@ -174,7 +184,6 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
                     for (int i = (selected.size() - 1); i >= 0; i--) {
                         try {
                             Alarm selecteditem = mAdapter.getItem(selected.keyAt(i));
-
                             data.put(selecteditem.getId());
                             entity = new StringEntity(data.toString());
                         } catch (UnsupportedEncodingException e) {
@@ -188,14 +197,14 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
 
                             mAdapter.updateItemsValue(isAcknowledge);
                             Toast.makeText(getActivity(), "Successfully " + (isAcknowledge ? "Acknowledged" : "Unacknowledged"), Toast.LENGTH_LONG).show();
-
+                            removeSelections= true;
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                             Log.d("internal-error", error.getLocalizedMessage());
                             Toast.makeText(getActivity(), " Error occcured!", Toast.LENGTH_LONG).show();
-
+                            removeSelections= true;
                         }
                     });
                 }
@@ -215,7 +224,9 @@ public class AlarmFragment extends Fragment implements AbsListView.OnItemClickLi
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 // TODO Auto-generated method stub
-                mAdapter.removeSelection();
+                if(removeSelections) {
+                    mAdapter.removeSelection();
+                }
                 mListView.clearChoices();
             }
 

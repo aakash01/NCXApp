@@ -124,8 +124,8 @@ public class ApprovalActivity extends AppCompatActivity  {
 
                 new MaterialDialog.Builder(this)
                         .title("Approve")
-                        .content("Note")
-                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .content("Notes")
+                        .inputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
                         .input(null,null, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -137,8 +137,8 @@ public class ApprovalActivity extends AppCompatActivity  {
                 posturl = "/rest/workflowtasks/" + id + "/action/reject";
                 new MaterialDialog.Builder(this)
                         .title("Reject")
-                        .content("Note")
-                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .content("Notes")
+                        .inputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE)
                         .input(null,null, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {

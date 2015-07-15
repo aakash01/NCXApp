@@ -22,7 +22,7 @@
             android:id="@+id/login_hosturl"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="Host Url"
+            android:hint="Server Url"
             android:inputType="textUri" />
 
         <EditText
