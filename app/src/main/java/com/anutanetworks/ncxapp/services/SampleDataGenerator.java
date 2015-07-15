@@ -1,8 +1,10 @@
 package com.anutanetworks.ncxapp.services;
 
 import com.anutanetworks.ncxapp.model.Alarm;
+import com.anutanetworks.ncxapp.model.AlarmsSummary;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.model.Capacity;
+import com.anutanetworks.ncxapp.model.TasksSummary;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,7 +29,7 @@ public class SampleDataGenerator {
 
         for (int i = 0; i < randInt(min,max); i++) {
             double index = Math.random() * charactersLength;
-            buffer.append(i==0? capital.charAt((int) index):characters.charAt((int) index));
+            buffer.append(i == 0 ? capital.charAt((int) index) : characters.charAt((int) index));
         }
         return buffer.toString();
     }
@@ -50,8 +52,8 @@ public class SampleDataGenerator {
             alarm.setComponentType(componentType[j]);
             alarm.setAlarmState(alarmState[k]);
             alarm.setComponent(getRandomString(5,15));
-            alarm.setDescription(getRandomString(5,30));
-            alarm.setMessage(getRandomString(5,30));
+            alarm.setDescription(getRandomString(5, 30));
+            alarm.setMessage(getRandomString(5, 30));
             alarms.add(alarm);
         }
         return alarms;
@@ -62,7 +64,7 @@ public class SampleDataGenerator {
 
         for(int i=0;i<randInt(2,20);i++){
             Capacity c = new Capacity();
-            c.setUsed(randInt(1,100));
+            c.setUsed(randInt(1, 100));
             c.setComponentName(getRandomString(5, 10));
             capacities.add(c);
         }
@@ -112,5 +114,25 @@ public class SampleDataGenerator {
         }
         return capacities;
     }
+     public static TasksSummary getSystemSummary()
+     {
+         TasksSummary summary = new TasksSummary();
+         summary.setTasksError(randInt(0, 30));
+         summary.setTasksRunning(randInt(0, 35));
+         summary.setTasksWaiting(randInt(0, 30));
+         summary.setTenants(randInt(0, 30));
+         summary.setVdcs(randInt(0, 30));
+         summary.setVms(randInt(0,30));
+         return summary;
+     }
 
+    public static AlarmsSummary getAlarmSummary() {
+        AlarmsSummary alarmsSummary = new AlarmsSummary();
+        alarmsSummary.setCritical(randInt(0,30));
+        alarmsSummary.setInfo(randInt(0, 30));
+        alarmsSummary.setMajor(randInt(0, 30));
+        alarmsSummary.setMinor(randInt(0, 30));
+        alarmsSummary.setWarning(randInt(0,30));
+        return alarmsSummary;
+    }
 }

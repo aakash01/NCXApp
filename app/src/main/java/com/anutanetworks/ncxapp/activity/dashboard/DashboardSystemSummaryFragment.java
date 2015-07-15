@@ -14,6 +14,7 @@ import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.AlarmsSummary;
 import com.anutanetworks.ncxapp.model.TasksSummary;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.anutanetworks.ncxapp.services.SampleDataGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -47,65 +48,72 @@ public class DashboardSystemSummaryFragment extends Fragment {
     }
 
     private void getAlarmSummaryData() {
-        AnutaRestClient.get("/rest/alarms/summary", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    final AlarmsSummary alarmsSummary = objectMapper.readValue(response.toString(), AlarmsSummary.class);
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateAlarmSummaryData(alarmsSummary);
-                            }
-                        });
+        if (AnutaRestClient.isAllowOffline()) {
+            updateAlarmSummaryData(SampleDataGenerator.getAlarmSummary());
+        } else {
+            AnutaRestClient.get("/rest/alarms/summary", null, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        final AlarmsSummary alarmsSummary = objectMapper.readValue(response.toString(), AlarmsSummary.class);
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateAlarmSummaryData(alarmsSummary);
+                                }
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-            }
-             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                  JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                 Toast.makeText(getActivity(), "Unable to Load Alarm Summary Data", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                      JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    Toast.makeText(getActivity(), "Unable to Load Alarm Summary Data", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
     private void getSystemSummaryData() {
-        AnutaRestClient.get("/rest/tasks/summary", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    final TasksSummary tasksSummary = objectMapper.readValue(response.toString(), TasksSummary.class);
-                    Activity activity = getActivity();
-                    if(activity != null) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateSystemSummaryData(tasksSummary);
-                            }
-                        });
+        if (AnutaRestClient.isAllowOffline()) {
+            updateSystemSummaryData(SampleDataGenerator.getSystemSummary());
+        } else {
+            AnutaRestClient.get("/rest/tasks/summary", null, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        final TasksSummary tasksSummary = objectMapper.readValue(response.toString(), TasksSummary.class);
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateSystemSummaryData(tasksSummary);
+                                }
+                            });
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                  JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Toast.makeText(getActivity(), "Unable to Load System Summary Data", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                      JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    Toast.makeText(getActivity(), "Unable to Load System Summary Data", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
-
     private void updateSystemSummaryData(TasksSummary tasksSummary) {
         TextView tenantCount = (TextView) view.findViewById(R.id.summarytenant);
         tenantCount.setText(String.valueOf(tasksSummary.getTenants()));
