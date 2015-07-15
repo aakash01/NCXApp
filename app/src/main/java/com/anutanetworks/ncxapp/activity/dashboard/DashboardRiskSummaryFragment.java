@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.anutanetworks.ncxapp.R;
 import com.anutanetworks.ncxapp.model.Capacity;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
+import com.anutanetworks.ncxapp.services.SampleDataGenerator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -53,73 +54,81 @@ public class DashboardRiskSummaryFragment extends Fragment {
     }
 
     private void getRiskHealthData() {
-        AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_HEALTH&count=5", null,
-                new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        try {
-                            ObjectMapper objectMapper = new ObjectMapper();
-                            final ArrayList<Capacity> healths = objectMapper
-                                    .readValue(response.toString(), new TypeReference<List<Capacity>>() {
+        if(AnutaRestClient.isAllowOffline()){
+            addhealth(SampleDataGenerator.getRiskData());
+        }else {
+            AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_HEALTH&count=5", null,
+                    new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                            try {
+                                ObjectMapper objectMapper = new ObjectMapper();
+                                final ArrayList<Capacity> healths = objectMapper
+                                        .readValue(response.toString(), new TypeReference<List<Capacity>>() {
+                                        });
+                                Activity activity = getActivity();
+                                if (activity != null) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addhealth(healths);
+                                        }
                                     });
-                            Activity activity = getActivity();
-                            if (activity != null) {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        addhealth(healths);
-                                    }
-                                });
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                          JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Health Data", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                              JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Health Data", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
     }
     private void getRiskCapacityData() {
-        AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_CAPACITY&count=5", null,
-                new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        try {
-                            ObjectMapper objectMapper = new ObjectMapper();
-                            final ArrayList<Capacity> capacities = objectMapper
-                                    .readValue(response.toString(), new TypeReference<List<Capacity>>() {
+        if(AnutaRestClient.isAllowOffline()){
+            addData(SampleDataGenerator.getRiskData());
+        }else {
+            AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_CAPACITY&count=5", null,
+                    new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                            try {
+                                ObjectMapper objectMapper = new ObjectMapper();
+                                final ArrayList<Capacity> capacities = objectMapper
+                                        .readValue(response.toString(), new TypeReference<List<Capacity>>() {
+                                        });
+                                Activity activity = getActivity();
+                                if (activity != null) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            addData(capacities);
+                                        }
                                     });
-                            Activity activity = getActivity();
-                            if (activity != null) {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        addData(capacities);
-                                    }
-                                });
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                          JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Utilized Capacity Data", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                              JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            Toast.makeText(getActivity(), "Unable to Load At Risk Pods By Utilized Capacity Data", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
     }
 
     private void getRiskWorkloadData() {
         if(AnutaRestClient.isAllowOffline()){
-
+            addwork(SampleDataGenerator.getRiskData());
         }else {
             AnutaRestClient.get("/rest/capacities/filter/top?componentType=SUBNETWORK&capacityType=AGGREGATE_WORKLOAD&count=5", null,
                     new JsonHttpResponseHandler() {
