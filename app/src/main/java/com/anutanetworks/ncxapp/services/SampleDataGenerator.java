@@ -1,6 +1,7 @@
 package com.anutanetworks.ncxapp.services;
 
 import com.anutanetworks.ncxapp.model.Alarm;
+import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.model.Capacity;
 
 import java.util.ArrayList;
@@ -73,8 +74,40 @@ public class SampleDataGenerator {
 
         for(int i=0;i<5;i++){
             Capacity c = new Capacity();
-            c.setUsed(randInt(1,100));
-            c.setComponentName(getRandomString(5,10));
+            c.setUsed(randInt(1, 100));
+            c.setComponentName(getRandomString(5, 10));
+            capacities.add(c);
+        }
+        return capacities;
+    }
+
+    public static ArrayList<Approval> getApprovalData(){
+        String[] approvalOriginator = {"admin","user"};
+        String[] approvalStatus = {"Approved","Rejected"};
+        String[] componentType={"POD","POLICY","DEVICE", "RESOURCE_POOL","INTERFACE"};
+        String[] alarmState = {"ACTIVE","CLEARED"};
+        boolean[] isAck = {true,false};
+        ArrayList<Approval> approvals = new ArrayList<>();
+        Approval approval;
+        for(int i=0;i<30;i++){
+            approval = new Approval();
+            int j = randInt(0,1);
+            int k = randInt(0,1);
+            approval.setOriginator(approvalOriginator[k]);
+            approval.setApproved(approvalStatus[j]);
+            String desc = getRandomString(5,15)+'\n'+getRandomString(15,30);
+            approval.setDescription(desc);
+            approvals.add(approval);
+        }
+        return approvals;
+    }
+    public static ArrayList<Capacity> getServiceSummary(){
+        ArrayList<Capacity> capacities = new ArrayList<>();
+
+        for(int i=0;i<randInt(2,20);i++){
+            Capacity c = new Capacity();
+            c.setUsed(randInt(1, 10));
+            c.setComponentName(getRandomString(5, 10));
             capacities.add(c);
         }
         return capacities;

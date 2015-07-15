@@ -21,6 +21,7 @@ import com.anutanetworks.ncxapp.adapter.ApprovalGridAdapter;
 import com.anutanetworks.ncxapp.model.Approval;
 import com.anutanetworks.ncxapp.services.AnutaRestClient;
 import com.anutanetworks.ncxapp.services.EndlessScrollListener;
+import com.anutanetworks.ncxapp.services.SampleDataGenerator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -81,49 +82,52 @@ public class ApprovalFragment extends Fragment implements AbsListView.OnItemClic
         requestParams.add("limit", String.valueOf(limit));
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("property","date");
+            jsonObject.put("property", "date");
             jsonObject.put("direction", "DESC");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(jsonObject);
-        requestParams.add("sort",jsonArray.toString());
-        AnutaRestClient.get("/rest/workflowtasks", requestParams, new JsonHttpResponseHandler() {
-           @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
+        requestParams.add("sort", jsonArray.toString());
+        if (AnutaRestClient.isAllowOffline()) {
+            mAdapter.updateApprovalEntries(SampleDataGenerator.getApprovalData());
+        } else {
+            AnutaRestClient.get("/rest/workflowtasks", requestParams, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
 
-                    ObjectMapper objectMapper1 = new ObjectMapper();
-                    Object val = response.get("data");
-                    final ArrayList<Approval> approvals = objectMapper1.readValue(val.toString(), new TypeReference<List<Approval>>() {
-                    });
-                    Activity activity = getActivity();
-                    if (activity != null) {
-                        activity.runOnUiThread(new Runnable() {
-                            public void run() {
-                                mAdapter.updateApprovalEntries(approvals);
-                            }
+                        ObjectMapper objectMapper1 = new ObjectMapper();
+                        Object val = response.get("data");
+                        final ArrayList<Approval> approvals = objectMapper1.readValue(val.toString(), new TypeReference<List<Approval>>() {
                         });
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    mAdapter.updateApprovalEntries(approvals);
+                                }
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } finally {
+                        swipeRefreshLayout.setRefreshing(false);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                } finally {
-                    swipeRefreshLayout.setRefreshing(false);
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), "Unable to Load Approval Data", Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), "Unable to Load Approval Data", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
