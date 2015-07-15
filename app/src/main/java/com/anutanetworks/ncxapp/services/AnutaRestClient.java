@@ -22,10 +22,10 @@ public class AnutaRestClient {
 
     private static AsyncHttpClient client = null;
 
-    private boolean allowOffline = false;
+    private static boolean allowOffline = false;
 
     public static boolean isAllowOffline(){
-        return true;
+        return allowOffline;
     }
 
 
@@ -35,6 +35,7 @@ public class AnutaRestClient {
         String actualUsername = paramMap.get("username");
         String password = paramMap.get("password");
         String organization = paramMap.get("organization");
+        allowOffline = Boolean.valueOf(paramMap.get("allowOffline"));
 
         if (ValidationUtils.isNotNull(organization)) {
             actualUsername += "|" + organization;

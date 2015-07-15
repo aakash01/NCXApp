@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class LoginActivity extends Activity {
     EditText usernameText;
     EditText passwordText;
     EditText organizationText;
+    CheckBox allowOfflineCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class LoginActivity extends Activity {
         usernameText = (EditText) findViewById(R.id.login_username);
         passwordText = (EditText) findViewById(R.id.login_password);
         organizationText = (EditText) findViewById(R.id.login_organization);
+        allowOfflineCheck = (CheckBox) findViewById(R.id.login_allowOffline);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Authenticating ...");
         progressDialog.setCancelable(false);
@@ -55,6 +58,7 @@ public class LoginActivity extends Activity {
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
         String organization = organizationText.getText().toString();
+        Boolean allowOffline = allowOfflineCheck.isChecked();
         Map<String, String> paramMap = new HashMap();
         if (ValidationUtils.isNotNull(host_url)) {
             paramMap.put("host_url", host_url);
@@ -62,6 +66,7 @@ public class LoginActivity extends Activity {
                 paramMap.put("username", username);
                 paramMap.put("password", password);
                 paramMap.put("organization", organization);
+                paramMap.put("allowOffline",allowOffline.toString());
                 validateLogin(paramMap);
             } else {
                 Toast.makeText(getApplicationContext(), "Please fill username and password", Toast.LENGTH_LONG).show();
@@ -74,32 +79,33 @@ public class LoginActivity extends Activity {
     public void validateLogin(final Map<String, String> paramMap) {
         progressDialog.show();
         AnutaRestClient.initializeClient(paramMap);
-
-        AnutaRestClient.post("/login", null, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                progressDialog.hide();
-                Toast.makeText(getApplicationContext(), "Welcome "+paramMap.get("username")+"!", Toast.LENGTH_LONG).show();
-                navigatetoMainActivity(paramMap);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                progressDialog.hide();
-                if (statusCode == 401) {
-                    errorMsg.setText("Invalid username / password");
-                    Toast.makeText(getApplicationContext(), "Authentication Failure", Toast.LENGTH_LONG).show();
-                } else if (statusCode == 500) {
-                    Toast.makeText(getApplicationContext(), "Something went wrong at server", Toast.LENGTH_LONG).show();
-                } else if(error != null){
-                    Toast.makeText(getApplicationContext(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        if(AnutaRestClient.isAllowOffline()){
+            navigatetoMainActivity(paramMap);
+        }else {
+            AnutaRestClient.post("/login", null, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    progressDialog.hide();
+                    Toast.makeText(getApplicationContext(), "Welcome " + paramMap.get("username") + "!", Toast.LENGTH_LONG).show();
+                    navigatetoMainActivity(paramMap);
                 }
 
-                else {
-                    Toast.makeText(getApplicationContext(), "Unexpected Error occcured!", Toast.LENGTH_LONG).show();
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    progressDialog.hide();
+                    if (statusCode == 401) {
+                        errorMsg.setText("Invalid username / password");
+                        Toast.makeText(getApplicationContext(), "Authentication Failure", Toast.LENGTH_LONG).show();
+                    } else if (statusCode == 500) {
+                        Toast.makeText(getApplicationContext(), "Something went wrong at server", Toast.LENGTH_LONG).show();
+                    } else if (error != null) {
+                        Toast.makeText(getApplicationContext(), error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Unexpected Error occcured!", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void navigatetoMainActivity(Map<String, String> paramMap) {
